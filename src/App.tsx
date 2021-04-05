@@ -1,13 +1,9 @@
 import React from 'react';
+import SignIn from './pages';
 
 function App() {
   return (
-
-    <div>
-
-      <h3>
-        oiiiiii </h3>
-    </div>
+    <SignIn />
   );
 }
 
