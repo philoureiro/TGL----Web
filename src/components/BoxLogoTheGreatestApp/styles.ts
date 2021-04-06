@@ -38,6 +38,7 @@ export const Text_TheGreatestApp = styled.h1`
 `;
 
 export const Box_Logo = styled.div`
+  margin-top: 50px;
   display: flex;
   justify-content:  center;
   align-items: center;
