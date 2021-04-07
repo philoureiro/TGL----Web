@@ -1,17 +1,23 @@
 import React from 'react';
-import { Container, Text } from './styles';
+import { Container } from './styles';
+import CopyrightBar from '../../components/CopyrightBar';
+import Header from '../../components/Header';
 
-interface SignInProps {
+interface MyBetsProps {
 
 }
 
-const SignIn: React.FC<SignInProps> = () => {
+const MyBets: React.FC<MyBetsProps> = () => {
   return (
-    <Container>
-      <Text> oooisdgsd</Text>
-    </Container>
+    <>
+      <Header />
+      <Container>
+
+      </Container>
+      <CopyrightBar />
+    </>
   );
 };
 
 
-export default SignIn;
+export default MyBets;
