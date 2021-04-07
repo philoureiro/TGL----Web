@@ -1,13 +1,20 @@
 import React from 'react';
-import { Container, Text } from './styles';
+import { Container, TextButton } from './styles';
 
-const Card: React.FC = () => {
+interface GameActionButtonProps {
+  nameButton: string;
+  children?: any;
+
+}
+
+const GameActionButton: React.FC<GameActionButtonProps> = ({ nameButton, children }) => {
 
   return (
     <Container>
-
+      {children}
+      <TextButton>{nameButton}</TextButton>
     </Container>
   );
 }
 
-export default Card;
+export default GameActionButton;

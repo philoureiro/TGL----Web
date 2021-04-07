@@ -7,7 +7,7 @@ import NewBet from './pages/NewBet';
 
 function App() {
   return (
-    <MyBets />
+    <NewBet />
   );
 }
 
