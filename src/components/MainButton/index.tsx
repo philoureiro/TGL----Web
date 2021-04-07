@@ -5,7 +5,7 @@ const Card: React.FC = () => {
 
   return (
     <Container>
-      <Text> penis</Text>
+
     </Container>
   );
 }
