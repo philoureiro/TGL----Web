@@ -3,13 +3,15 @@ import { Container, ButtonText } from './styles';
 
 interface TypeOfGameButtonProps {
   nameButton: string;
+  backgroundColor: string;
+  color: string;
 }
 
-const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ nameButton }) => {
+const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ nameButton, backgroundColor, color }) => {
 
   return (
-    <Container>
-      <ButtonText>{nameButton}</ButtonText>
+    <Container style={{ backgroundColor: backgroundColor }}>
+      <ButtonText style={{ color: color }}>{nameButton}</ButtonText>
     </Container>
   );
 }

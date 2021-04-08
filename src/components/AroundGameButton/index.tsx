@@ -10,7 +10,7 @@ const AroundGameButton: React.FC<AroundGameButtonProps> = ({ numberButton, backg
 
   return (
     <Container style={{ backgroundColor: backgroundColor }}>
-      <Text>{numberButton}</Text>
+      <Text >{numberButton}</Text>
     </Container>
   );
 }

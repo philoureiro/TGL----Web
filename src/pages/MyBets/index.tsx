@@ -22,9 +22,9 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
         <BoxRecentGames>
           <TextRecentGames>RECENT GAMES</TextRecentGames>
           <TextDataAndPrice>Filters</TextDataAndPrice>
-          <TypeOfGameButton nameButton={'Lotomania'}></TypeOfGameButton>
-          <TypeOfGameButton nameButton={'Lotofácil'}></TypeOfGameButton>
-          <TypeOfGameButton nameButton={'Mega-Sena'}></TypeOfGameButton>
+          <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Lotomania'}></TypeOfGameButton>
+          <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Lotofácil'}></TypeOfGameButton>
+          <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
 
 
           <ButtonNewBet>

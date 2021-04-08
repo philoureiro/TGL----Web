@@ -1,12 +1,18 @@
 import styled from 'styled-components';
 
 
+
 export const Container = styled.div`
-  height: 300px;
-  width: 300px;
-  background-color: #000;
+  margin-top: -1px;
+  display: flex;
+  width: 100%;
+  height: 800px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: none;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  flex-direction: column;
+
 `;
 
-export const Text = styled.h3`
-  font-size: 24px;
-`;
