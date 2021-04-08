@@ -18,7 +18,7 @@ const BoxNumbersAndTypeOfGameSelecteds: React.FC<BoxNumbersAndTypeOfGameSelected
 
 
       <BoxInternal>
-        <NumbersText>11, 12,13,14 ,15, , 11, 12,13,14 ,15, 6, 7, 8, 9,10, 11, 12,13,14 ,15, 10, 11, 12,13,14 ,15</NumbersText>
+        <NumbersText>01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02,  </NumbersText>
         <TextDataAndPrice>30/11/2020 - (R$ 2,50)</TextDataAndPrice>
         <TextNameOfGame>Lotomania</TextNameOfGame>
       </BoxInternal>

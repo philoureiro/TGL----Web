@@ -64,20 +64,12 @@ const NewBet: React.FC<NewBetProps> = () => {
           </BoxTitle>
 
           <BoxButtonsTypeOfGame>
+            {
+              data.map((e) => (
+                <TypeOfGameButton backgroundColor={'#fff'} borderColor={e.color} color={e.color} nameButton={e.type}></TypeOfGameButton>
+              ))
+            }
 
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#fff'} nameButton={'Lotomania'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Lotofácil'}></TypeOfGameButton>
-
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
           </BoxButtonsTypeOfGame>
 
           <BoxDescription>
@@ -176,23 +168,3 @@ const NewBet: React.FC<NewBetProps> = () => {
 export default NewBet;
 
 
-/**
- *
- *
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#fff'} nameButton={'Lotomania'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Lotofácil'}></TypeOfGameButton>
-            <TypeOfGameButton backgroundColor={'#01AC66'} color={'#7F3992'} nameButton={'Mega-Sena'}></TypeOfGameButton>
-
- *
-             {
-              data.map((e) => (
-                <TypeOfGameButton backgroundColor={'#fff'} color={e.color} nameButton={'Lotomania'}></TypeOfGameButton>
-              ))
-            }
-
-
-
-             data.map((e, i) => (
-                <AroundGameButton backgroundColor={e.color} numberButton={`${i + 1}`}></AroundGameButton>
-              ))
- */

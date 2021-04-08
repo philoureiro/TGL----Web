@@ -11,6 +11,8 @@ export const Container = styled.button`
   border-radius: 30px;
   margin-right: 30px;
   outline: none;
+  border-width: 3px;
+  border-style: solid;
 
 
   &:hover{

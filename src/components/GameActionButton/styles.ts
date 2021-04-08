@@ -5,10 +5,11 @@ import { shade } from 'polished';
 export const Container = styled.button`
   display: flex;
   height: 60px;
-  background-color: #000;
   justify-content:center;
   align-items: center;
   border-radius: 15px;
+  border-width: 3px;
+  border-style: solid;
   outline: none;
   &:hover{
         background: ${shade(0.1, '#E2E2E2')};
