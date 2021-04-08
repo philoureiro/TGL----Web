@@ -6,8 +6,8 @@ export const Container = styled.div`
   min-height: 100vh;
   max-height: 100%;
   width: 100vw;
-  justify-content: flex-start;
-  align-items:  flex-start;
+  justify-content: center;
+  align-items:  center;
   flex-direction: row;
   background-color: #F7F7F7;
   display: flex;
@@ -24,8 +24,7 @@ export const Text = styled.h3`
 
 export const BoxNewBet = styled.div`
   margin-left: 150px;
-  width: auto;
-  margin-top: 150px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -34,16 +33,19 @@ export const BoxNewBet = styled.div`
 `;
 
 export const BoxNewCart = styled.div`
+margin-top: -140px;
   margin-left: 50px;
   margin-right: 150px;
-  width: 450px;
-  margin-top: 150px;
+  min-width: 520px;
+  max-width: 520px;
+
   display: flex;
   flex-direction: column;
   border-color: #EBEBEB;
   border-width: 5px;
   border-style: solid;
   border-radius: 15px;
+
 `;
 
 export const ButtonLogin = styled.button`
@@ -69,12 +71,23 @@ export const ButtonLogin = styled.button`
       }
 `;
 
-
 export const BoxTitle = styled.h3`
   display: flex;
   justify-content:  flex-start;
   align-items: flex-start;
+  width: 420px;
+  margin-top: -30px;
 `;
+
+export const BoxDescription = styled.h3`
+  display: flex;
+  justify-content:  center;
+  align-items: left;
+  width: 970px;
+  flex-direction: column;
+`;
+
+
 
 export const TextNewBet = styled.h3`
   font-family: helvetica;
@@ -126,9 +139,11 @@ export const TextDescriptionOfBet = styled.h3`
 
 export const BoxButtonsTypeOfGame = styled.div`
   display: flex;
-  height: 70px;
+  height: 100px;
+  width: 970px;
   justify-content: flex-start;
   align-items:  center;
+  overflow-x: auto;
 `;
 
 
@@ -136,16 +151,15 @@ export const BoxNumberAllButtonsArounds = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 90px));
   gap: 8px;
-  max-width: 1400px;
+  max-width: 1000px;
   justify-items: center;
   overflow-x: auto;
-
 `;
 
 export const BoxActionsButtons = styled.div`
   margin-top: 50px;
   display: flex;
-  width: 100%;
+  width: 975px;
   height: 70px;
   justify-content: space-between;
   align-items:  center;
