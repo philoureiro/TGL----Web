@@ -4,7 +4,7 @@ import { shade } from 'polished';
 
 export const Container = styled.button`
   display: flex;
-  height: 60px;
+  height: 70px;
   justify-content:center;
   align-items: center;
   border-radius: 15px;

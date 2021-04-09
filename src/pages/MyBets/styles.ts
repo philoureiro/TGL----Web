@@ -15,7 +15,13 @@ export const Container = styled.div`
   border-width: 5px;
   border-color: #EBEBEB;
   border-style: solid;
-`;
+
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    justify-content: center;
+    }
+  `;
 
 export const BoxRecentGames = styled.div`
   margin-top: 150px;

@@ -10,7 +10,7 @@ export const Container = styled.div`
 `;
 
 export const TextAcount = styled.h3`
-  margin-left: 50vw;
+  margin-left: 47vw;
   margin-right: 40vw;
   font-size: 28px;
   font-weight: bold;

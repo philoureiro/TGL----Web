@@ -6,7 +6,7 @@ export const Container = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 140px;
+  min-width: 150px;
   height: 50px;
   border-radius: 30px;
   margin-right: 30px;

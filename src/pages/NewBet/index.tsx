@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   Container, BoxNewBet, TextNewBet, TextChooseAGame, BoxNumberAllButtonsArounds, BoxIcon,
   BoxNewCart, TextFor, BoxTitle, BoxButtonsTypeOfGame, TextDescriptionOfBet, BoxActionsButtons,
@@ -14,11 +14,13 @@ import BoxNumbersAndTypeOfGameSelecteds from '../../components/BoxNumbersAndType
 import Cart from '../../components/Cart';
 import * as Icon from 'react-icons/fa';
 
+import { setJustOneTypeGameButtonWasMarked } from '../../store/actions';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { type } from 'node:os';
 interface NewBetProps {
 
 }
-
 interface DataProps {
   types: [{
     type: string,
@@ -32,8 +34,32 @@ interface DataProps {
 }
 
 const NewBet: React.FC<NewBetProps> = () => {
-
   const data = getDataOfJson();
+  const [numbersSelecteds, setNumbersSelected] = useState(['']);
+
+
+  console.log('=>>> NEWBET');
+  //console.log(dataAllButtons);
+  //console.log(dataNameOfSelectedButton);
+
+  const handleClickButtonTypeFame = useCallback((button) => {
+    console.log(button);
+  }, []);
+
+  const returnButtonsOfTypeGame = useCallback(() => {
+    let arrayOfButtons: any = [];
+
+    data.map((e: { type: string, color: string }, i: number) => {
+
+
+      arrayOfButtons.push(
+        <TypeOfGameButton onClick={() => handleClickButtonTypeFame(e.type)} key={i + 1} allowsMoreThanOneselection={true} backgroundColor={'#fff'} borderColor={e.color} color={e.color} nameButton={e.type} ></TypeOfGameButton >
+      );
+    })
+
+    return arrayOfButtons;
+  }, []);
+
 
   const returnAroundButtons = useCallback((indice) => {
     let aux = 0;
@@ -41,14 +67,16 @@ const NewBet: React.FC<NewBetProps> = () => {
 
     while (aux < data[indice].range) {
       arrayOfButtons.push(
-        <AroundGameButton backgroundColor={data[indice].color} numberButton={`${aux + 1}`}></AroundGameButton>
+        <AroundGameButton key={aux + 1} backgroundColor={data[indice].color} numberButton={`${aux + 1}`}></AroundGameButton>
       );
       aux++;
     }
     return arrayOfButtons;
   }, []);
 
-
+  const returnDescriptionOfBet = useCallback((indice) => {
+    return data[indice].description;
+  }, []);
 
   return (
     <>
@@ -63,30 +91,14 @@ const NewBet: React.FC<NewBetProps> = () => {
             <TextChooseAGame>Choose a game</TextChooseAGame>
           </BoxTitle>
 
-          <BoxButtonsTypeOfGame>
-            {
-              data.map((e) => (
-                <TypeOfGameButton backgroundColor={'#fff'} borderColor={e.color} color={e.color} nameButton={e.type}></TypeOfGameButton>
-              ))
-            }
-
-          </BoxButtonsTypeOfGame>
+          <BoxButtonsTypeOfGame>{returnButtonsOfTypeGame()}</BoxButtonsTypeOfGame>
 
           <BoxDescription>
             <TextChooseAGame>Fill your bet</TextChooseAGame>
-            <TextDescriptionOfBet>Fill your bet Mark as many numbers as you want up to a maximum of 50. Win by hitting 15, 16, 17, 18, 19, 20 or none of the 20 numbers drawn.</TextDescriptionOfBet>
-
+            <TextDescriptionOfBet>{returnDescriptionOfBet(2)}</TextDescriptionOfBet>
           </BoxDescription>
 
-          <BoxNumberAllButtonsArounds>
-
-
-            {
-              returnAroundButtons(3)
-            }
-
-
-          </BoxNumberAllButtonsArounds>
+          <BoxNumberAllButtonsArounds>{returnAroundButtons(2)}</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
             <GameActionButton backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} nameButton={'Complete game'}></GameActionButton>
@@ -103,44 +115,29 @@ const NewBet: React.FC<NewBetProps> = () => {
           <Cart>
             <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
 
-
             <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px' }}>
+              <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
                 <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
               </BoxIcon>
-              <BoxNumbersAndTypeOfGameSelecteds></BoxNumbersAndTypeOfGameSelecteds>
+
+              <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={'01, 02, 03'} nameOfGame={data[2].type} markupColor={data[2].color} dataAndPrice={'11'} />
+
+
             </BoxInternalCart>
 
             <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px' }}>
+              <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
                 <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
               </BoxIcon>
-              <BoxNumbersAndTypeOfGameSelecteds></BoxNumbersAndTypeOfGameSelecteds>
+              <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={'01, 02, 03, 04, 05, 06 01, 02, 03, 04, 05, 06 '} nameOfGame={data[1].type} markupColor={data[1].color} dataAndPrice={'11'} />
             </BoxInternalCart>
 
             <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px' }}>
+              <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
                 <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
               </BoxIcon>
-              <BoxNumbersAndTypeOfGameSelecteds></BoxNumbersAndTypeOfGameSelecteds>
+              <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={'01, 02, 03, 04, 05, 06 01, 02, 03, 04, 05, 06, 05, 06 01, 02, 03, 04, 05, 06'} nameOfGame={data[3].type} markupColor={data[3].color} dataAndPrice={'11'} />
             </BoxInternalCart>
-
-
-            <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px' }}>
-                <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
-              </BoxIcon>
-              <BoxNumbersAndTypeOfGameSelecteds></BoxNumbersAndTypeOfGameSelecteds>
-            </BoxInternalCart>
-
-
-            <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px' }}>
-                <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
-              </BoxIcon>
-              <BoxNumbersAndTypeOfGameSelecteds></BoxNumbersAndTypeOfGameSelecteds>
-            </BoxInternalCart>
-
 
             <BoxInternalCart style={{ justifyContent: 'left', alignItems: 'flex-start' }}>
               <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
@@ -156,7 +153,6 @@ const NewBet: React.FC<NewBetProps> = () => {
             </BoxIcon>
           </ButtonLogin>
         </BoxNewCart>
-
 
       </Container>
       <CopyrightBar />

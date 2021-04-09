@@ -6,21 +6,23 @@ import {
 
 
 interface BoxNumbersAndTypeOfGameSelectedsProps {
+  numberSelecteds: string;
+  dataAndPrice: string;
+  nameOfGame: string;
+  markupColor: string;
 
 }
 
-const BoxNumbersAndTypeOfGameSelecteds: React.FC<BoxNumbersAndTypeOfGameSelectedsProps> = () => {
+const BoxNumbersAndTypeOfGameSelecteds: React.FC<BoxNumbersAndTypeOfGameSelectedsProps> = ({ numberSelecteds,
+  dataAndPrice, nameOfGame, markupColor }) => {
 
   return (
     <Container>
-      <MarkupBox />
-
-
-
+      <MarkupBox style={{ backgroundColor: markupColor }} />
       <BoxInternal>
-        <NumbersText>01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02, 01, 02,  </NumbersText>
-        <TextDataAndPrice>30/11/2020 - (R$ 2,50)</TextDataAndPrice>
-        <TextNameOfGame>Lotomania</TextNameOfGame>
+        <NumbersText>{numberSelecteds}</NumbersText>
+        <TextDataAndPrice>{dataAndPrice}</TextDataAndPrice>
+        <TextNameOfGame style={{ color: markupColor }}>{nameOfGame}</TextNameOfGame>
       </BoxInternal>
     </Container>
   );

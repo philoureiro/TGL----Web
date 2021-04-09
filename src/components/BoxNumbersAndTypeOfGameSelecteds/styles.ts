@@ -12,7 +12,7 @@ margin-top: 20px;
 export const BoxInternal = styled.div`
   display: flex;
   height: 100%;
-  width: 98%;
+  width: 410px;
   justify-content: space-evenly;
   align-items: flex-start;
   flex-direction: column;

@@ -35,6 +35,33 @@
       "max-number": 20,
       "color": "#FF1493",
       "min-cart-value": 30
+    },
+    {
+      "type": "Dupla-Sena",
+      "description": "Com apenas um bilhete da Dupla Sena, você tem o dobro de chances de ganhar: são dois sorteios por concurso e ganha acertando 3, 4, 5 ou 6 números no primeiro e/ou segundo sorteios.",
+      "range": 50,
+      "price": 2.5,
+      "max-number": 6,
+      "color": "#F02828",
+      "min-cart-value": 30
+    },
+    {
+      "type": "Timemania",
+      "description": "Você escolhe dez números entre os oitenta disponíveis e um Time do Coração. São sorteados sete números e um Time do Coração por concurso. Se você tiver de três a sete acertos, ou acertar o time do coração, ganha.",
+      "range": 80,
+      "price": 3,
+      "max-number": 10,
+      "color": "#2E4A01",
+      "min-cart-value": 30
+    },
+    {
+      "type": "Dia de sorte",
+      "description": "O Dia de Sorte é a loteria onde você aposta seus números da sorte. Escolha de 7 a 15 números dentre os 31 disponíveis e mais 1 “Mês de Sorte”. São sorteados sete números e um “Mês de Sorte” por concurso.",
+      "range": 31,
+      "price": 2,
+      "max-number": 7,
+      "color": "#443B3B",
+      "min-cart-value": 30
     }
   ]
 }

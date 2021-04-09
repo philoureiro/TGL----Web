@@ -54,11 +54,11 @@ export const ButtonLogin = styled.button`
   border-top-color: #EBEBEB;
   border-top-width: 5px;
   border-top-style: solid;
-  font-size: 40px;
-  font-family: helvetica, sans-serif;
+  font-size: 45px;
+  font-family: helvetica;
   font-style: italic;
   font-weight: bold;
-  color: #B5C401;
+  color: #27C383;
   background-color: #F4F4F4;
   justify-content: center;
   align-items: center;
@@ -107,13 +107,11 @@ export const TextTitleCart = styled.h3`
   font-size: 30px;
 `;
 
-
-TextTitleCart
 export const TextFor = styled.h3`
   margin-left: 10px;
   font-family: helvetica;
   font-style: italic;
-  font-weight: normal;
+  font-weight: lighter;
   color: #707070;
   font-size: 30px;
 `;
@@ -172,13 +170,12 @@ export const BoxIcon = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 10px;
-
 `;
 
 
 export const BoxInternalCart = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin-left: 10px;
   margin-right: 10px;
