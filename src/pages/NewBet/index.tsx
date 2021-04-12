@@ -35,64 +35,44 @@ interface DataProps {
 
 const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
-  const [numbersSelecteds, setNumbersSelected] = useState(Array.prototype);
-  const [typeOfGameSelecteds, setTypeOfGamesSelected] = useState(String);
-  let nameButtonSelected = 'Lotofácil';
+  const [currentGame, setCurrentGame] = useState([{
+    type: '',
+    description: '',
+    range: 0,
+    price: 0,
+    'max-number': 0,
+    color: '',
+    'min-cart-value': 0
+  }]);
 
-  const handleClickButtonTypeGame = useCallback((button) => {
-    setTypeOfGamesSelected(button);
-    nameButtonSelected = button;
-  }, []);
 
-  const isSelected = useCallback((nameButton) => {
 
-    return true;
-  }, []);
+
+  const handleClickButtonTypeGame = useCallback((nameButton) => {
+    const dataCurrent = data.filter((e) => (e.type === nameButton));
+    setCurrentGame(dataCurrent);
+  }, [currentGame]);
+
 
 
   const returnButtonsOfTypeGame = useCallback(() => {
     let arrayOfButtons: any = [];
 
-    data.map((e: { type: string, color: string }, i: number) => {
-      arrayOfButtons.push(
-        <TypeOfGameButton onClick={() => handleClickButtonTypeGame(e.type)} key={i + 1} backgroundColor={'#fff'}
-          isSelected={isSelected(e.type)} borderColor={e.color} color={e.color} nameButton={e.type} ></TypeOfGameButton >
-      );
-    })
 
     return arrayOfButtons;
   }, []);
 
 
   const returnAroundButtons = useCallback(() => {
-    console.log(nameButtonSelected);
-    let indice = 0;
-    data.forEach((element, i) => {
-      element.type === nameButtonSelected ? indice = i : null
-    });
-
-    let aux = 0;
     let arrayOfButtons = [];
 
-    while (aux < data[indice].range) {
-      arrayOfButtons.push(
-        <AroundGameButton key={aux + 1} backgroundColor={data[indice].color} numberButton={`${aux + 1}`}></AroundGameButton>
-      );
-      aux++;
+    for (let index = 0; index < currentGame[0].range; index++) {
+      arrayOfButtons.push(<AroundGameButton key={index + 1} backgroundColor={currentGame[0].color} numberButton={`${index + 1}`}></AroundGameButton>)
     }
+
     return arrayOfButtons;
-  }, []);
+  }, [currentGame]);
 
-  const returnDescriptionOfBet = useCallback(() => {
-    let indice = 0;
-    let description = data[0].description;
-    data.forEach((element, i) => {
-      element.type === nameButtonSelected ? indice = i : null
-    });
-
-    return data[indice].description;
-
-  }, []);
 
   return (
     <>
@@ -107,11 +87,19 @@ const NewBet: React.FC<NewBetProps> = () => {
             <TextChooseAGame>Choose a game</TextChooseAGame>
           </BoxTitle>
 
-          <BoxButtonsTypeOfGame>{returnButtonsOfTypeGame()}</BoxButtonsTypeOfGame>
+          <BoxButtonsTypeOfGame>{
+            data.map((e: { type: string, color: string }, i: number) => {
+              return (
+                <TypeOfGameButton currentGame={currentGame} onClick={() => handleClickButtonTypeGame(e.type)} key={i + 1} backgroundColor={'#fff'}
+                  borderColor={e.color} color={e.color} nameButton={e.type} ></TypeOfGameButton >
+              )
+            })}
+
+          </BoxButtonsTypeOfGame>
 
           <BoxDescription>
             <TextChooseAGame>Fill your bet</TextChooseAGame>
-            <TextDescriptionOfBet>{returnDescriptionOfBet()}</TextDescriptionOfBet>
+            <TextDescriptionOfBet>{currentGame[0].description}</TextDescriptionOfBet>
           </BoxDescription>
 
           <BoxNumberAllButtonsArounds>{returnAroundButtons()}</BoxNumberAllButtonsArounds>

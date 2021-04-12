@@ -70,7 +70,7 @@ export const ButtonLogin = styled.button`
       }
 `;
 
-export const BoxTitle = styled.h3`
+export const BoxTitle = styled.div`
   display: flex;
   justify-content:  flex-start;
   align-items: flex-start;
@@ -78,7 +78,7 @@ export const BoxTitle = styled.h3`
   margin-top: -30px;
 `;
 
-export const BoxDescription = styled.h3`
+export const BoxDescription = styled.div`
   display: flex;
   justify-content:  center;
   align-items: left;

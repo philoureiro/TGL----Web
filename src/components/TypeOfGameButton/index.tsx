@@ -11,35 +11,13 @@ interface TypeOfGameButtonProps {
   color: string;
   borderColor: string;
   onClick: () => void;
-  isSelected: boolean;
+  currentGame: any;
 }
 
-const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ isSelected, nameButton, backgroundColor, color, borderColor, onClick }) => {
-  const data = getDataOfJson();
-  let backgroundColorCurrent = backgroundColor;
-  let colorCurrent = color;
-
-  useEffect(() => {
-    console.log('entrou no useEffect');
-    if (isSelected) {
-      console.log('entrou no if => ' + nameButton);
-      let buble = backgroundColor;
-      backgroundColorCurrent = colorCurrent;
-      colorCurrent = buble;
-
-    } else {
-      console.log('entrou no else => ' + nameButton);
-      let backgroundColorCurrent = backgroundColor;
-      let colorCurrent = color;
-    }
-
-  }, [backgroundColorCurrent, colorCurrent]);
-
-
-
+const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ currentGame, nameButton, backgroundColor, color, borderColor, onClick }) => {
   return (
-    <Container onClick={onClick} style={{ backgroundColor: backgroundColorCurrent, borderColor: borderColor }}>
-      <ButtonText style={{ color: colorCurrent }}>{nameButton}</ButtonText>
+    <Container onClick={onClick} style={{ backgroundColor: currentGame[0].type === nameButton ? currentGame[0].color : '#fff', borderColor: borderColor }}>
+      <ButtonText style={{ color: currentGame[0].type === nameButton ? '#fff' : color }}>{nameButton}</ButtonText>
     </Container>
   );
 }
