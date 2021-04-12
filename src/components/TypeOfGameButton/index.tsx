@@ -3,18 +3,18 @@ import { Container, ButtonText } from './styles';
 import { getDataOfJson } from '../../services/api'
 import { setArrayAllTypesGameButtonsWasMarked, setJustOneTypeGameButtonWasMarked } from '../../store/actions'
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store'
+//import { RootState } from '../../store/store'
 
 interface TypeOfGameButtonProps {
   nameButton: string;
   backgroundColor: string;
   color: string;
   borderColor: string;
-  allowsMoreThanOneselection: boolean;
   onClick: () => void;
+  isSelected: boolean;
 }
 
-const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ nameButton, backgroundColor, color, borderColor, onClick, allowsMoreThanOneselection }) => {
+const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ isSelected, nameButton, backgroundColor, color, borderColor, onClick }) => {
   const data = getDataOfJson();
 
 

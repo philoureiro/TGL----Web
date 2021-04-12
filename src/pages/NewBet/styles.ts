@@ -19,7 +19,6 @@ export const Container = styled.div`
 
 export const Text = styled.h3`
   font-size: 24px;
-
 `;
 
 export const BoxNewBet = styled.div`

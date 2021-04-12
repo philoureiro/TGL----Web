@@ -35,25 +35,26 @@ interface DataProps {
 
 const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
-  const [numbersSelecteds, setNumbersSelected] = useState(['']);
+  const [numbersSelecteds, setNumbersSelected] = useState(Array.prototype);
+  const [typeOfGameSelecteds, setTypeOfGamesSelected] = useState(String);
 
-
-  console.log('=>>> NEWBET');
-  //console.log(dataAllButtons);
-  //console.log(dataNameOfSelectedButton);
-
-  const handleClickButtonTypeFame = useCallback((button) => {
-    console.log(button);
+  const handleClickButtonTypeGame = useCallback((button) => {
+    setTypeOfGamesSelected(button);
   }, []);
+
+  const isSelected = useCallback((nameButton) => {
+
+    return true;
+  }, []);
+
 
   const returnButtonsOfTypeGame = useCallback(() => {
     let arrayOfButtons: any = [];
 
     data.map((e: { type: string, color: string }, i: number) => {
-
-
       arrayOfButtons.push(
-        <TypeOfGameButton onClick={() => handleClickButtonTypeFame(e.type)} key={i + 1} allowsMoreThanOneselection={true} backgroundColor={'#fff'} borderColor={e.color} color={e.color} nameButton={e.type} ></TypeOfGameButton >
+        <TypeOfGameButton onClick={() => handleClickButtonTypeGame(e.type)} key={i + 1} backgroundColor={'#fff'}
+          isSelected={isSelected(e.type)} borderColor={e.color} color={e.color} nameButton={e.type} ></TypeOfGameButton >
       );
     })
 
@@ -61,7 +62,12 @@ const NewBet: React.FC<NewBetProps> = () => {
   }, []);
 
 
-  const returnAroundButtons = useCallback((indice) => {
+  const returnAroundButtons = useCallback((typeButton) => {
+    let indice = 0;
+    data.forEach((element, i) => {
+      element.type === typeButton ? indice = i : null
+    });
+
     let aux = 0;
     let arrayOfButtons = [];
 
@@ -98,7 +104,7 @@ const NewBet: React.FC<NewBetProps> = () => {
             <TextDescriptionOfBet>{returnDescriptionOfBet(2)}</TextDescriptionOfBet>
           </BoxDescription>
 
-          <BoxNumberAllButtonsArounds>{returnAroundButtons(2)}</BoxNumberAllButtonsArounds>
+          <BoxNumberAllButtonsArounds>{returnAroundButtons(typeOfGameSelecteds)}</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
             <GameActionButton backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} nameButton={'Complete game'}></GameActionButton>
