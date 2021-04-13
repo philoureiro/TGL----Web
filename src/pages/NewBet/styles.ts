@@ -87,7 +87,6 @@ export const BoxDescription = styled.div`
 `;
 
 
-
 export const TextNewBet = styled.h3`
   font-family: helvetica;
   font-style: italic;

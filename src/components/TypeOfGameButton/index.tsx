@@ -24,29 +24,3 @@ const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ currentGame, nameBu
 
 export default TypeOfGameButton;
 
-
-/*
-   const changeColorButton = useEffect(() => {
-     let arrayOfButtonsSelecteds = [];
-     let buble = '';
-   }, [backgroundColorCurrent, colorCurrent]);
-
-
-   const handleClickButton = useCallback(() => {
-     let arrayOfButtonsSelecteds = [];
-     if (allowsMoreThanOneselection) {
-       //!dataAllButtons.includes(nameButton) ?
-
-
-
-
-       console.log('Retorno do redux => all');
-     } else {
-
-       console.log('Retorno do redux => just one');
-       // console.log(dataNameOfSelectedButton);
-
-     }
-   }, []);
-
- */
