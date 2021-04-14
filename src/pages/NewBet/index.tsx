@@ -59,23 +59,35 @@ const NewBet: React.FC<NewBetProps> = () => {
   }, [currentGame]);
 
 
-  const HandleSelected = useCallback((nameButton) => {
-    console.log('Selecionou o botão ' + nameButton);
+  const HandleSelected = (button: any) => {
+    console.log('Selecionou o botão ' + button.nameButton);
+    let buttonCurrent: any = [];
 
-    //console.log(buttonsArounds);
+    // console.log(buttonsArounds);
 
-    buttonsArounds.map((e: any) => {
-      console.log(e);
-    })
+    for (let index = 0; index < buttonsArounds.length; index++) {
+      let element: any = buttonsArounds[index];
+      if (element.nameButton === button.nameButton) {
+        element.buttonIsSelected = !element.buttonIsSelected;
+        buttonsArounds[index] = element;
 
-    //   console.log(e);
-    //   return e.nameButton === nameButton ? { ...e, buttonIsSelected: !e.buttonIsSelected } : e;
-    // })
+      }
+    }
 
-    // console.log(array);
-    //setButtonArounds(array);
+    buttonCurrent = buttonsArounds;
 
-  }, []);
+    setButtonArounds([...buttonCurrent]);
+
+  };
+
+  const functionReturnNumber = useCallback(() => {
+
+    console.log('callback');
+    return (buttonsArounds.map((e: any, index) => (
+      <AroundGameButton key={index + 1} onClick={() => (HandleSelected(e))} isSelected={e.buttonIsSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={
+        e.nameButton}></AroundGameButton>)
+    ));
+  }, [buttonsArounds]);
 
   const handleClickButtonTypeGame = useCallback((nameButton) => {
     const dataCurrent = data.filter((e) => (e.type === nameButton));
@@ -112,12 +124,8 @@ const NewBet: React.FC<NewBetProps> = () => {
           </BoxDescription>
 
           <BoxNumberAllButtonsArounds>{
-
-            buttonsArounds.map((e: any, index) => {
-              return (
-                <AroundGameButton key={index + 1} onClick={() => (HandleSelected(e.nameButton))} isSelected={e.buttonIsSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={
-                  e.nameButton}></AroundGameButton>)
-            })
+            functionReturnNumber()
+            //console.log(e.buttonIsSelected);
           }</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>

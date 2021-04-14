@@ -9,14 +9,15 @@ interface AroundGameButtonProps {
   onClick: () => void;
 }
 
-const AroundGameButton: React.FC<AroundGameButtonProps> = ({ isSelected, onClick, currentGame, numberButton, backgroundColor }) => {
+const AroundGameButton: React.FC<AroundGameButtonProps> = ({ isSelected, onClick, currentGame, numberButton, backgroundColor }) => (
 
-  return (
-    <Container onClick={onClick} style={{ backgroundColor: isSelected ? currentGame[0].color : backgroundColor }}>
-      <Text >{numberButton}</Text>
-    </Container>
-  );
-}
+  <Container onClick={onClick} style={{ backgroundColor: isSelected ? currentGame[0].color : backgroundColor }}>
+    <Text >{numberButton}</Text>
+  </Container>
+
+);
+
+
 
 
 
