@@ -35,6 +35,8 @@ const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
   const [buttonsArounds, setButtonArounds] = useState([{}]);
   const [isSelected, setIsSelect] = useState(false);
+  const [numbersOfButtonsSelecteds, setnumbersOfButtonsSelecteds] = useState(Array.prototype);
+
   const [currentGame, setCurrentGame] = useState([{
     type: 'Lotofácil',
     description: "Escolha 15 números para apostar na lotofácil. Você ganha acertando 11, 12, 13, 14 ou 15 números. São muitas chances de ganhar, e agora você joga de onde estiver!",
@@ -56,33 +58,55 @@ const NewBet: React.FC<NewBetProps> = () => {
 
     setButtonArounds(arrayOfButtons);
 
+
   }, [currentGame]);
 
 
   const HandleSelected = (button: any) => {
-    console.log('Selecionou o botão ' + button.nameButton);
-    let buttonCurrent: any = [];
 
-    // console.log(buttonsArounds);
+    let buttonCurrent: any = [];
+    let currentArrayOfButtonsSelecteds: any = [];
+
 
     for (let index = 0; index < buttonsArounds.length; index++) {
       let element: any = buttonsArounds[index];
+
       if (element.nameButton === button.nameButton) {
         element.buttonIsSelected = !element.buttonIsSelected;
         buttonsArounds[index] = element;
+      }
 
+      if (element.buttonIsSelected) {
+        if (currentArrayOfButtonsSelecteds.length < currentGame[0]['max-number']) {
+          //console.log('Selecionou o botão ' + element.nameButton);
+          currentArrayOfButtonsSelecteds.push(element.nameButton);
+        }
+        else if (currentArrayOfButtonsSelecteds.length === currentGame[0]['max-number']) {
+          console.log('=>>encheu');
+          element.buttonIsSelected = !element.buttonIsSelected;
+          buttonsArounds[index] = element;
+        } else {
+          element.buttonIsSelected = !element.buttonIsSelected;
+          buttonsArounds[index] = element;
+          break;
+        }
       }
     }
 
     buttonCurrent = buttonsArounds;
 
+    setnumbersOfButtonsSelecteds([...currentArrayOfButtonsSelecteds]);
     setButtonArounds([...buttonCurrent]);
 
   };
 
+
+
   const functionReturnNumber = useCallback(() => {
 
     console.log('callback');
+    console.log('numero de selects =>' + numbersOfButtonsSelecteds);
+
     return (buttonsArounds.map((e: any, index) => (
       <AroundGameButton key={index + 1} onClick={() => (HandleSelected(e))} isSelected={e.buttonIsSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={
         e.nameButton}></AroundGameButton>)
