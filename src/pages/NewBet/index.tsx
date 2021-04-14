@@ -33,7 +33,7 @@ interface DataProps {
 
 const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
-  const [buttonsAroundsSelecteds, setButtonAroundSelecteds] = useState([]);
+  const [buttonsArounds, setButtonArounds] = useState([{}]);
   const [isSelected, setIsSelect] = useState(false);
   const [currentGame, setCurrentGame] = useState([{
     type: 'Lotofácil',
@@ -45,10 +45,35 @@ const NewBet: React.FC<NewBetProps> = () => {
     'min-cart-value': 30
   }]);
 
+  useEffect(() => {
+    console.log('entrou no useEffect');
 
-  const HandleSelected = useCallback(() => {
-    window.alert('Selecionou um botão ' + !isSelected);
-    setIsSelect(!isSelected);
+    let arrayOfButtons = [];
+
+    for (let index = 0; index < currentGame[0].range; index++) {
+      arrayOfButtons.push({ nameButton: `${index + 1}`, buttonIsSelected: false });
+    }
+
+    setButtonArounds(arrayOfButtons);
+
+  }, [currentGame]);
+
+
+  const HandleSelected = useCallback((nameButton) => {
+    console.log('Selecionou o botão ' + nameButton);
+
+    //console.log(buttonsArounds);
+
+    buttonsArounds.map((e: any) => {
+      console.log(e);
+    })
+
+    //   console.log(e);
+    //   return e.nameButton === nameButton ? { ...e, buttonIsSelected: !e.buttonIsSelected } : e;
+    // })
+
+    // console.log(array);
+    //setButtonArounds(array);
 
   }, []);
 
@@ -57,19 +82,6 @@ const NewBet: React.FC<NewBetProps> = () => {
     setCurrentGame(dataCurrent);
   }, [currentGame]);
 
-  const returnAroundButtons = useCallback(() => {
-    let arrayOfButtons = [];
-
-    for (let index = 0; index < currentGame[0].range; index++) {
-      arrayOfButtons.push(<AroundGameButton key={index + 1} onClick={HandleSelected} isSelected={isSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={`${index + 1}`}></AroundGameButton>)
-    }
-
-    return arrayOfButtons;
-  }, [currentGame]);
-
-  useEffect(() => {
-    window.alert('entrou no useEffect');
-  }, [isSelected]);
 
   return (
     <>
@@ -99,7 +111,14 @@ const NewBet: React.FC<NewBetProps> = () => {
             <TextDescriptionOfBet>{currentGame[0].description}</TextDescriptionOfBet>
           </BoxDescription>
 
-          <BoxNumberAllButtonsArounds>{returnAroundButtons()}</BoxNumberAllButtonsArounds>
+          <BoxNumberAllButtonsArounds>{
+
+            buttonsArounds.map((e: any, index) => {
+              return (
+                <AroundGameButton key={index + 1} onClick={() => (HandleSelected(e.nameButton))} isSelected={e.buttonIsSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={
+                  e.nameButton}></AroundGameButton>)
+            })
+          }</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
             <GameActionButton backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} nameButton={'Complete game'}></GameActionButton>
@@ -147,7 +166,7 @@ const NewBet: React.FC<NewBetProps> = () => {
             </BoxInternalCart>
           </Cart>
 
-          <ButtonLogin onClick={() => { }}>
+          <ButtonLogin>
             Save
               <BoxIcon>
               <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
@@ -163,3 +182,22 @@ const NewBet: React.FC<NewBetProps> = () => {
 
 
 export default NewBet;
+
+
+/*
+  const returnAroundButtons = useCallback(() => {
+    let arrayOfButtons = [];
+
+    for (let index = 0; index < currentGame[0].range; index++) {
+      arrayOfButtons.push(<AroundGameButton key={index + 1} onClick={HandleSelected} isSelected={isSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={`${index + 1}`}></AroundGameButton>)
+    }
+
+    return arrayOfButtons;
+  }, [currentGame]);
+
+
+
+
+ arrayOfButtons.push(<AroundGameButton key={index + 1} onClick={HandleSelected} isSelected={isSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={`${index + 1}`}></AroundGameButton>)
+
+*/
