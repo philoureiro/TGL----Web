@@ -33,9 +33,8 @@ interface DataProps {
 
 const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
-  const [buttonsArounds, setButtonArounds] = useState([{}]);
-  const [isSelected, setIsSelect] = useState(false);
-  const [numbersOfButtonsSelecteds, setnumbersOfButtonsSelecteds] = useState(Array.prototype);
+  const [numbers, setNumbers] = useState(Array.prototype);
+  const [numbersSelecteds, setnumbersSelecteds] = useState(Array.prototype);
 
   const [currentGame, setCurrentGame] = useState([{
     type: 'Lotofácil',
@@ -50,68 +49,39 @@ const NewBet: React.FC<NewBetProps> = () => {
   useEffect(() => {
     console.log('entrou no useEffect');
 
-    let arrayOfButtons = [];
+    let arrayOfButtons: any = [];
 
     for (let index = 0; index < currentGame[0].range; index++) {
-      arrayOfButtons.push({ nameButton: `${index + 1}`, buttonIsSelected: false });
+      arrayOfButtons.push(index + 1);
     }
 
-    setButtonArounds(arrayOfButtons);
+    setNumbers(arrayOfButtons);
+    setnumbersSelecteds([]);
 
 
   }, [currentGame]);
 
 
-  const HandleSelected = (button: any) => {
+  const HandleSelected = useCallback((number: number) => {
 
-    let buttonCurrent: any = [];
-    let currentArrayOfButtonsSelecteds: any = [];
-
-
-    for (let index = 0; index < buttonsArounds.length; index++) {
-      let element: any = buttonsArounds[index];
-
-      if (element.nameButton === button.nameButton) {
-        element.buttonIsSelected = !element.buttonIsSelected;
-        buttonsArounds[index] = element;
-      }
-
-      if (element.buttonIsSelected) {
-        if (currentArrayOfButtonsSelecteds.length < currentGame[0]['max-number']) {
-          //console.log('Selecionou o botão ' + element.nameButton);
-          currentArrayOfButtonsSelecteds.push(element.nameButton);
-        }
-        else if (currentArrayOfButtonsSelecteds.length === currentGame[0]['max-number']) {
-          console.log('=>>encheu');
-          element.buttonIsSelected = !element.buttonIsSelected;
-          buttonsArounds[index] = element;
-        } else {
-          element.buttonIsSelected = !element.buttonIsSelected;
-          buttonsArounds[index] = element;
-          break;
-        }
-      }
+    if (!numbersSelecteds.includes(number) && numbersSelecteds.length < currentGame[0]['max-number']) {
+      console.log(numbersSelecteds);
+      setnumbersSelecteds([...numbersSelecteds, number].sort((a, b) => a - b));
+    } else {
+      setnumbersSelecteds(numbersSelecteds.filter((n) => n !== number));
     }
-
-    buttonCurrent = buttonsArounds;
-
-    setnumbersOfButtonsSelecteds([...currentArrayOfButtonsSelecteds]);
-    setButtonArounds([...buttonCurrent]);
-
-  };
-
+  }, [numbersSelecteds]);
 
 
   const functionReturnNumber = useCallback(() => {
+    console.log('numero de selects =>' + numbersSelecteds);
 
-    console.log('callback');
-    console.log('numero de selects =>' + numbersOfButtonsSelecteds);
+    //console.log(buttonsArounds.indexOf(1));
 
-    return (buttonsArounds.map((e: any, index) => (
-      <AroundGameButton key={index + 1} onClick={() => (HandleSelected(e))} isSelected={e.buttonIsSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={
-        e.nameButton}></AroundGameButton>)
+    return (numbers.map((number: any, index) => (
+      <AroundGameButton key={index + 1} onClick={() => (HandleSelected(number))} isSelected={numbersSelecteds.includes(number)} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={number}></AroundGameButton>)
     ));
-  }, [buttonsArounds]);
+  }, [numbersSelecteds]);
 
   const handleClickButtonTypeGame = useCallback((nameButton) => {
     const dataCurrent = data.filter((e) => (e.type === nameButton));
@@ -233,3 +203,44 @@ export default NewBet;
  arrayOfButtons.push(<AroundGameButton key={index + 1} onClick={HandleSelected} isSelected={isSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={`${index + 1}`}></AroundGameButton>)
 
 */
+
+
+/**
+ *
+ *
+ *
+  const HandleSelected = (button: any) => {
+
+    let buttonCurrent: any = [];
+    let currentArrayOfButtonsSelecteds: any = [];
+
+
+    for (let index = 0; index < buttonsArounds.length; index++) {
+      let element: any = buttonsArounds[index];
+
+      if (element.nameButton === button.nameButton) {
+        element.buttonIsSelected = !element.buttonIsSelected;
+        buttonsArounds[index] = element;
+      }
+
+      if (element.buttonIsSelected) {
+        if (currentArrayOfButtonsSelecteds.length < currentGame[0]['max-number']) {
+          //console.log('Selecionou o botão ' + element.nameButton);
+          currentArrayOfButtonsSelecteds.push(element.nameButton);
+          console.log(parseInt(button.nameButton) < currentArrayOfButtonsSelecteds[`${currentGame[0]['max-number']}`])
+          console.log('botao =>' + parseInt(button.nameButton));
+          console.log('ultimo elemento? ' + parseInt(currentArrayOfButtonsSelecteds[`${currentGame[0]['max-number'] - 1}`]));
+        }
+        else {
+          element.buttonIsSelected = !element.buttonIsSelected;
+          buttonsArounds[index] = element;
+        }
+
+        // if (currentArrayOfButtonsSelecteds.length < currentGame[0]['max-number'] && parseInt(button.nameButton) < currentArrayOfButtonsSelecteds[currentGame[0]['max-number'] - 1]) {
+        //   console.log('=>>menor selecionado');
+        // }
+      }
+
+ *
+ *
+ */
