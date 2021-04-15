@@ -35,6 +35,8 @@ const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
   const [numbers, setNumbers] = useState(Array.prototype);
   const [numbersSelecteds, setnumbersSelecteds] = useState(Array.prototype);
+  const [numbersSelectedsInCart, setnumbersSelectedsInCart] = useState(Array.prototype);
+
 
   const [currentGame, setCurrentGame] = useState([{
     type: 'Lotofácil',
@@ -65,7 +67,7 @@ const NewBet: React.FC<NewBetProps> = () => {
   const HandleSelected = useCallback((number: number) => {
 
     if (!numbersSelecteds.includes(number) && numbersSelecteds.length < currentGame[0]['max-number']) {
-      console.log(numbersSelecteds);
+
       setnumbersSelecteds([...numbersSelecteds, number].sort((a, b) => a - b));
     } else {
       setnumbersSelecteds(numbersSelecteds.filter((n) => n !== number));
@@ -74,7 +76,7 @@ const NewBet: React.FC<NewBetProps> = () => {
 
 
   const functionReturnNumber = useCallback(() => {
-    console.log('numero de selects =>' + numbersSelecteds);
+    //console.log('numero de selects =>' + numbersSelecteds);
 
     //console.log(buttonsArounds.indexOf(1));
 
@@ -87,6 +89,20 @@ const NewBet: React.FC<NewBetProps> = () => {
     const dataCurrent = data.filter((e) => (e.type === nameButton));
     setCurrentGame(dataCurrent);
   }, [currentGame]);
+
+  const handleAddToCart = useCallback((typeOfGameSelected) => {
+    let gameSelected = [{
+      type: typeOfGameSelected.type,
+      price: typeOfGameSelected.price,
+      color: typeOfGameSelected.color,
+      numbersSelecteds: numbersSelecteds,
+    }]
+    setnumbersSelectedsInCart([...numbersSelectedsInCart, gameSelected]);
+    setnumbersSelecteds([]);
+  }, [numbersSelecteds]);
+
+
+
 
 
   return (
@@ -123,9 +139,15 @@ const NewBet: React.FC<NewBetProps> = () => {
           }</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
-            <GameActionButton backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} nameButton={'Complete game'}></GameActionButton>
-            <GameActionButton backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} marginLeft={'-250px'} nameButton={'Clear game'}></GameActionButton>
-            <GameActionButton backgroundColor={'#01AC66'} color={'#fff'} borderColor={'#01AC66'} nameButton={'Add to cart'}>
+            <GameActionButton onClick={() => { }} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} nameButton={'Complete game'}></GameActionButton>
+            <GameActionButton onClick={() => setnumbersSelecteds([])} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} marginLeft={'-250px'} nameButton={'Clear game'}></GameActionButton>
+            <GameActionButton onClick={() => {
+              if (numbersSelecteds.length < currentGame[0]['max-number']) {
+                window.alert(`São necessários ao menos ${currentGame[0]['max-number']} números selecionados para adicionar ao carrinho!`)
+              } else {
+                handleAddToCart(currentGame[0]);
+              }
+            }} backgroundColor={'#01AC66'} color={'#fff'} borderColor={'#01AC66'} nameButton={'Add to cart'}>
               <BoxIcon>
                 <Icon.FaCartArrowDown size={30} color={'#fff'}></Icon.FaCartArrowDown>
               </BoxIcon>
@@ -136,36 +158,19 @@ const NewBet: React.FC<NewBetProps> = () => {
         <BoxNewCart>
           <Cart>
             <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
+            {
 
-            <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
-                <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
-              </BoxIcon>
-
-              <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={'01, 02, 03'} nameOfGame={data[2].type} markupColor={data[2].color} dataAndPrice={'11'} />
-
-
-            </BoxInternalCart>
-
-            <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
-                <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
-              </BoxIcon>
-              <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={'01, 02, 03, 04, 05, 06 01, 02, 03, 04, 05, 06 '} nameOfGame={data[1].type} markupColor={data[1].color} dataAndPrice={'11'} />
-            </BoxInternalCart>
-
-            <BoxInternalCart>
-              <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
-                <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
-              </BoxIcon>
-              <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={'01, 02, 03, 04, 05, 06 01, 02, 03, 04, 05, 06, 05, 06 01, 02, 03, 04, 05, 06'} nameOfGame={data[3].type} markupColor={data[3].color} dataAndPrice={'11'} />
-            </BoxInternalCart>
-
-            <BoxInternalCart style={{ justifyContent: 'left', alignItems: 'flex-start' }}>
-              <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
-              <TextFor style={{ marginLeft: '20px', fontStyle: 'normal' }}>TOTAL:</TextFor>
-              <TextFor style={{ marginLeft: '20px', fontStyle: 'normal' }}>R$ 7,00</TextFor>
-            </BoxInternalCart>
+              numbersSelectedsInCart.map((element: [{ type: string, color: string, price: number, numbersSelecteds: [] }]) => {
+                return (
+                  <BoxInternalCart>
+                    <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
+                      <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
+                    </BoxIcon>
+                    <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={element[0].numbersSelecteds} nameOfGame={element[0].type} markupColor={element[0].color} dataAndPrice={JSON.stringify(element[0].price)} />
+                  </BoxInternalCart>
+                )
+              })
+            }
           </Cart>
 
           <ButtonLogin>

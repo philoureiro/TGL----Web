@@ -8,14 +8,14 @@ interface GameActionButtonProps {
   borderColor: string;
   marginLeft?: string;
   children?: any;
-
+  onClick: () => void;
 }
 
 const GameActionButton: React.FC<GameActionButtonProps> = ({ nameButton, children, color,
-  backgroundColor, borderColor, marginLeft }) => {
+  backgroundColor, borderColor, marginLeft, onClick }) => {
 
   return (
-    <Container style={{ backgroundColor: backgroundColor, borderColor: borderColor, marginLeft: marginLeft }}>
+    <Container onClick={onClick} style={{ backgroundColor: backgroundColor, borderColor: borderColor, marginLeft: marginLeft }}>
       {children}
       <TextButton style={{ color: color }}>{nameButton}</TextButton>
     </Container>

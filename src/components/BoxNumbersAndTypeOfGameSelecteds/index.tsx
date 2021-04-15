@@ -6,7 +6,7 @@ import {
 
 
 interface BoxNumbersAndTypeOfGameSelectedsProps {
-  numberSelecteds: string;
+  numberSelecteds: [];
   dataAndPrice: string;
   nameOfGame: string;
   markupColor: string;
@@ -20,7 +20,7 @@ const BoxNumbersAndTypeOfGameSelecteds: React.FC<BoxNumbersAndTypeOfGameSelected
     <Container>
       <MarkupBox style={{ backgroundColor: markupColor }} />
       <BoxInternal>
-        <NumbersText>{numberSelecteds}</NumbersText>
+        <NumbersText>{numberSelecteds.map((e) => ` ${e},`)}</NumbersText>
         <TextDataAndPrice>{dataAndPrice}</TextDataAndPrice>
         <TextNameOfGame style={{ color: markupColor }}>{nameOfGame}</TextNameOfGame>
       </BoxInternal>
