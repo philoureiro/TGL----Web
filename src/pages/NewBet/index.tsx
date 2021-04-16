@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 import {
   Container, BoxNewBet, TextNewBet, TextChooseAGame, BoxNumberAllButtonsArounds, BoxIcon,
   BoxNewCart, TextFor, BoxTitle, BoxButtonsTypeOfGame, TextDescriptionOfBet, BoxActionsButtons,
-  ButtonLogin, TextTitleCart, BoxInternalCart, BoxDescription
+  ButtonLogin, TextTitleCart, BoxInternalCart, BoxDescription, BoxEmptyCart, Img
 } from './styles';
 import { getDataOfJson } from '../../services/api'
 import CopyrightBar from '../../components/CopyrightBar';
@@ -13,7 +13,8 @@ import AroundGameButton from '../../components/AroundGameButton';
 import BoxNumbersAndTypeOfGameSelecteds from '../../components/BoxNumbersAndTypeOfGameSelecteds';
 import Cart from '../../components/Cart';
 import * as Icon from 'react-icons/fa';
-import { isInterfaceDeclaration } from 'typescript';
+import EmptyCart from '../../assets/emptyCar.png'
+import { parse } from 'node:querystring';
 
 interface NewBetProps {
 
@@ -37,7 +38,6 @@ const NewBet: React.FC<NewBetProps> = () => {
   const [numbersSelecteds, setnumbersSelecteds] = useState(Array.prototype);
   const [numbersSelectedsInCart, setnumbersSelectedsInCart] = useState(Array.prototype);
 
-
   const [currentGame, setCurrentGame] = useState([{
     type: 'Lotofácil',
     description: "Escolha 15 números para apostar na lotofácil. Você ganha acertando 11, 12, 13, 14 ou 15 números. São muitas chances de ganhar, e agora você joga de onde estiver!",
@@ -59,8 +59,6 @@ const NewBet: React.FC<NewBetProps> = () => {
 
     setNumbers(arrayOfButtons);
     setnumbersSelecteds([]);
-
-
   }, [currentGame]);
 
 
@@ -102,7 +100,12 @@ const NewBet: React.FC<NewBetProps> = () => {
   }, [numbersSelecteds]);
 
 
+  const returnPriceTotal = useCallback(() => {
+    let price = 0;
+    numbersSelectedsInCart.forEach((element) => { price += element[0].price });
 
+    return price;
+  }, [numbersSelectedsInCart]);
 
 
   return (
@@ -139,15 +142,19 @@ const NewBet: React.FC<NewBetProps> = () => {
           }</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
-            <GameActionButton onClick={() => { }} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} nameButton={'Complete game'}></GameActionButton>
-            <GameActionButton onClick={() => setnumbersSelecteds([])} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} marginLeft={'-250px'} nameButton={'Clear game'}></GameActionButton>
-            <GameActionButton onClick={() => {
+            <GameActionButton nameButton={'Complete game'} onClick={() => { }} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} ></GameActionButton>
+
+
+            <GameActionButton nameButton={'Clear game'} onClick={() => setnumbersSelecteds([])} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} marginLeft={'-250px'} ></GameActionButton>
+
+
+            <GameActionButton nameButton={'Add to cart'} onClick={() => {
               if (numbersSelecteds.length < currentGame[0]['max-number']) {
                 window.alert(`São necessários ao menos ${currentGame[0]['max-number']} números selecionados para adicionar ao carrinho!`)
               } else {
                 handleAddToCart(currentGame[0]);
               }
-            }} backgroundColor={'#01AC66'} color={'#fff'} borderColor={'#01AC66'} nameButton={'Add to cart'}>
+            }} backgroundColor={'#01AC66'} color={'#fff'} borderColor={'#01AC66'}>
               <BoxIcon>
                 <Icon.FaCartArrowDown size={30} color={'#fff'}></Icon.FaCartArrowDown>
               </BoxIcon>
@@ -158,18 +165,33 @@ const NewBet: React.FC<NewBetProps> = () => {
         <BoxNewCart>
           <Cart>
             <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
-            {
+            {numbersSelectedsInCart.length === 0
 
-              numbersSelectedsInCart.map((element: [{ type: string, color: string, price: number, numbersSelecteds: [] }]) => {
+              ? <BoxEmptyCart>
+                <Img src={EmptyCart} style={{ width: '500px', marginRight: '40px' }} />
+              </BoxEmptyCart>
+
+              :
+
+              numbersSelectedsInCart.map((element: [{ type: string, color: string, price: number, numbersSelecteds: [] }], indice) => {
+                let a = 0;
                 return (
-                  <BoxInternalCart>
-                    <BoxIcon style={{ marginRight: '10px', marginTop: '20px' }}>
+                  <BoxInternalCart key={indice + 1}>
+                    <BoxIcon onClick={() => { setnumbersSelectedsInCart(numbersSelectedsInCart.filter((e) => e !== element)) }} style={{ marginRight: '10px', marginTop: '20px' }}>
                       <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
                     </BoxIcon>
                     <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={element[0].numbersSelecteds} nameOfGame={element[0].type} markupColor={element[0].color} dataAndPrice={JSON.stringify(element[0].price)} />
                   </BoxInternalCart>
                 )
               })
+            }
+
+            {numbersSelectedsInCart.length > 0 ? <BoxInternalCart style={{ justifyContent: 'left', alignItems: 'flex-end' }}>
+              <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
+              <TextFor style={{ marginLeft: '20px', fontStyle: 'normal' }}>TOTAL:</TextFor>
+              <TextFor style={{ marginLeft: '20px', fontStyle: 'normal' }}> {returnPriceTotal()}</TextFor>
+            </BoxInternalCart>
+              : null
             }
           </Cart>
 
@@ -191,61 +213,3 @@ const NewBet: React.FC<NewBetProps> = () => {
 export default NewBet;
 
 
-/*
-  const returnAroundButtons = useCallback(() => {
-    let arrayOfButtons = [];
-
-    for (let index = 0; index < currentGame[0].range; index++) {
-      arrayOfButtons.push(<AroundGameButton key={index + 1} onClick={HandleSelected} isSelected={isSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={`${index + 1}`}></AroundGameButton>)
-    }
-
-    return arrayOfButtons;
-  }, [currentGame]);
-
-
-
-
- arrayOfButtons.push(<AroundGameButton key={index + 1} onClick={HandleSelected} isSelected={isSelected} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={`${index + 1}`}></AroundGameButton>)
-
-*/
-
-
-/**
- *
- *
- *
-  const HandleSelected = (button: any) => {
-
-    let buttonCurrent: any = [];
-    let currentArrayOfButtonsSelecteds: any = [];
-
-
-    for (let index = 0; index < buttonsArounds.length; index++) {
-      let element: any = buttonsArounds[index];
-
-      if (element.nameButton === button.nameButton) {
-        element.buttonIsSelected = !element.buttonIsSelected;
-        buttonsArounds[index] = element;
-      }
-
-      if (element.buttonIsSelected) {
-        if (currentArrayOfButtonsSelecteds.length < currentGame[0]['max-number']) {
-          //console.log('Selecionou o botão ' + element.nameButton);
-          currentArrayOfButtonsSelecteds.push(element.nameButton);
-          console.log(parseInt(button.nameButton) < currentArrayOfButtonsSelecteds[`${currentGame[0]['max-number']}`])
-          console.log('botao =>' + parseInt(button.nameButton));
-          console.log('ultimo elemento? ' + parseInt(currentArrayOfButtonsSelecteds[`${currentGame[0]['max-number'] - 1}`]));
-        }
-        else {
-          element.buttonIsSelected = !element.buttonIsSelected;
-          buttonsArounds[index] = element;
-        }
-
-        // if (currentArrayOfButtonsSelecteds.length < currentGame[0]['max-number'] && parseInt(button.nameButton) < currentArrayOfButtonsSelecteds[currentGame[0]['max-number'] - 1]) {
-        //   console.log('=>>menor selecionado');
-        // }
-      }
-
- *
- *
- */

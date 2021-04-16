@@ -179,3 +179,14 @@ export const BoxInternalCart = styled.div`
   margin-right: 10px;
   margin-bottom: 10px;
 `;
+
+export const BoxEmptyCart = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+export const Img = styled.img`
+`;
