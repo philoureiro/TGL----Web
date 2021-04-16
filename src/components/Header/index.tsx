@@ -1,11 +1,13 @@
 import React from 'react';
 import {
   Container, MarkupLogo, BoxLogo,
-  BoxIcon, TextAcount, ButtonExit, TextLogo
+  BoxIcon, ButtonAccount, ButtonExit, TextLogo
 } from './styles';
 import * as Icon from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 const Card: React.FC = () => {
 
+  const history = useHistory();
   return (
     <Container>
       <BoxLogo>
@@ -13,8 +15,8 @@ const Card: React.FC = () => {
         <MarkupLogo />
       </BoxLogo>
 
-      <TextAcount>Account</TextAcount>
-      <ButtonExit>
+      <ButtonAccount onClick={() => history.push('/mybets')}>Account</ButtonAccount>
+      <ButtonExit onClick={() => history.push('/signin')}>
         Log out
         <BoxIcon>
           <Icon.FaArrowRight size={25}></Icon.FaArrowRight>

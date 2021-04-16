@@ -8,6 +8,7 @@ import BoxLogoTheGreatestApp from '../../components/BoxLogoTheGreatestApp';
 import CopyrightBar from '../../components/CopyrightBar';
 import BoxInput from '../../components/BoxInput';
 import * as Icon from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 
 
 interface RecoveryPasswordProps {
@@ -15,6 +16,8 @@ interface RecoveryPasswordProps {
 }
 
 const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
+
+  const history = useHistory();
   return (
     <>
       <Container>
@@ -33,7 +36,7 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
               </BoxIcon>
             </ButtonLogin>
           </CardInput>
-          <ButtonLogin onClick={() => { }} style={{ color: '#707070' }}>
+          <ButtonLogin onClick={() => history.goBack()} style={{ color: '#707070' }}>
             <BoxIcon>
               <Icon.FaArrowLeft size={30}></Icon.FaArrowLeft>
             </BoxIcon>

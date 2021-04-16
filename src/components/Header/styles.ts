@@ -9,7 +9,7 @@ export const Container = styled.div`
   display: flex;
 `;
 
-export const TextAcount = styled.h3`
+export const ButtonAccount = styled.button`
   margin-left: 47vw;
   margin-right: 40vw;
   font-size: 28px;
@@ -17,6 +17,9 @@ export const TextAcount = styled.h3`
   font-style: italic;
   font-family: helvetica;
   color: #707070;
+  outline: none;
+  border: none;
+  background-color: transparent;
 `;
 
 export const BoxLogo = styled.div`

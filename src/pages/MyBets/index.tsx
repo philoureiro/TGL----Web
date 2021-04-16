@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import TypeOfGameButton from '../../components/TypeOfGameButton';
 import BoxNumbersAndTypeOfGameSelecteds from '../../components/BoxNumbersAndTypeOfGameSelecteds';
 import * as Icon from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 
 interface MyBetsProps {
 
@@ -15,6 +16,8 @@ interface MyBetsProps {
 }
 
 const MyBets: React.FC<MyBetsProps> = ({ }) => {
+
+  const history = useHistory();
   return (
     <>
       <Header />
@@ -23,7 +26,7 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
           <TextRecentGames>RECENT GAMES</TextRecentGames>
           <TextDataAndPrice>Filters</TextDataAndPrice>
 
-          <ButtonNewBet>
+          <ButtonNewBet onClick={() => history.push('/newbet')}>
             New Bet
             <BoxIcon>
               <Icon.FaArrowRight size={25}></Icon.FaArrowRight>

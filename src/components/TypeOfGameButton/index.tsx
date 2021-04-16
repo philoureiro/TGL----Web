@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { Container, ButtonText } from './styles';
 import { getDataOfJson } from '../../services/api'
-import { setArrayAllTypesGameButtonsWasMarked, setJustOneTypeGameButtonWasMarked } from '../../store/actions'
 import { useDispatch, useSelector } from 'react-redux';
 //import { RootState } from '../../store/store'
 

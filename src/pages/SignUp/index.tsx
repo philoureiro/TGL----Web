@@ -8,6 +8,7 @@ import BoxLogoTheGreatestApp from '../../components/BoxLogoTheGreatestApp';
 import CopyrightBar from '../../components/CopyrightBar';
 import BoxInput from '../../components/BoxInput';
 import * as Icon from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 
 
 interface SignUpProps {
@@ -15,6 +16,8 @@ interface SignUpProps {
 }
 
 const SignUp: React.FC<SignUpProps> = () => {
+
+  const history = useHistory();
   return (
     <>
       <Container>
@@ -32,14 +35,14 @@ const SignUp: React.FC<SignUpProps> = () => {
             <BoxInput label={'Password:'} HasIcon={{ size: 20, color: '#fff' }}>
               <TextInput type={'password'}></TextInput>
             </BoxInput>
-            <ButtonLogin onClick={() => { }}>
+            <ButtonLogin onClick={() => history.push('/mybets')}>
               Register
               <BoxIcon>
                 <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
               </BoxIcon>
             </ButtonLogin>
           </CardInput>
-          <ButtonLogin onClick={() => { }} style={{ color: '#707070' }}>
+          <ButtonLogin onClick={() => history.goBack()} style={{ color: '#707070' }}>
             <BoxIcon>
               <Icon.FaArrowLeft size={30}></Icon.FaArrowLeft>
             </BoxIcon>
