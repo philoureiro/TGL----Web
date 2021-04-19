@@ -7,7 +7,6 @@ import SignUp from './pages/SignUp';
 import RecoveryPassword from './pages/RecoveryPassword';
 import MyBets from './pages/MyBets';
 import NewBet from './pages/NewBet';
-
 import Route from '../src/routes/index';
 
 function App() {
@@ -15,7 +14,6 @@ function App() {
     //<Provider store={store}>
     <BrowserRouter>
       <Route />
-
     </BrowserRouter>
   );
 }

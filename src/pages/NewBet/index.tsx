@@ -49,8 +49,6 @@ const NewBet: React.FC<NewBetProps> = () => {
   }]);
 
   useEffect(() => {
-    console.log('entrou no useEffect');
-
     let arrayOfButtons: any = [];
 
     for (let index = 0; index < currentGame[0].range; index++) {
@@ -65,7 +63,6 @@ const NewBet: React.FC<NewBetProps> = () => {
   const HandleSelected = useCallback((number: number) => {
 
     if (!numbersSelecteds.includes(number) && numbersSelecteds.length < currentGame[0]['max-number']) {
-
       setnumbersSelecteds([...numbersSelecteds, number].sort((a, b) => a - b));
     } else {
       setnumbersSelecteds(numbersSelecteds.filter((n) => n !== number));
@@ -74,10 +71,6 @@ const NewBet: React.FC<NewBetProps> = () => {
 
 
   const functionReturnNumber = useCallback(() => {
-    //console.log('numero de selects =>' + numbersSelecteds);
-
-    //console.log(buttonsArounds.indexOf(1));
-
     return (numbers.map((number: any, index) => (
       <AroundGameButton key={index + 1} onClick={() => (HandleSelected(number))} isSelected={numbersSelecteds.includes(number)} currentGame={currentGame} backgroundColor={'#ADC0C4'} numberButton={number}></AroundGameButton>)
     ));
@@ -99,6 +92,22 @@ const NewBet: React.FC<NewBetProps> = () => {
     setnumbersSelecteds([]);
   }, [numbersSelecteds]);
 
+  function getRandom(minValue: number, maxValue: number) {
+    return Math.floor(Math.random() * maxValue + minValue);
+  }
+
+  const handleCompleteGame = useCallback(() => {
+    let currentArray = numbersSelecteds;
+    while (currentArray.length < currentGame[0]['max-number']) {
+      const buttonRandom = getRandom(1, currentGame[0].range);
+      if (!numbersSelecteds.includes(buttonRandom) && numbersSelecteds.length < currentGame[0]['max-number']) {
+        currentArray.push(buttonRandom);
+      }
+    }
+
+    setnumbersSelecteds([...currentArray].sort((a, b) => a - b));
+
+  }, [numbersSelecteds]);
 
   const returnPriceTotal = useCallback(() => {
     let price = 0;
@@ -138,11 +147,12 @@ const NewBet: React.FC<NewBetProps> = () => {
 
           <BoxNumberAllButtonsArounds>{
             functionReturnNumber()
-            //console.log(e.buttonIsSelected);
+
+
           }</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
-            <GameActionButton nameButton={'Complete game'} onClick={() => { }} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} ></GameActionButton>
+            <GameActionButton nameButton={'Complete game'} onClick={() => handleCompleteGame()} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} ></GameActionButton>
 
 
             <GameActionButton nameButton={'Clear game'} onClick={() => setnumbersSelecteds([])} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} marginLeft={'-250px'} ></GameActionButton>
