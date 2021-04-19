@@ -16,7 +16,7 @@ const Card: React.FC = () => {
       </BoxLogo>
 
       <ButtonAccount onClick={() => history.push('/mybets')}>Account</ButtonAccount>
-      <ButtonExit onClick={() => history.push('/signin')}>
+      <ButtonExit onClick={() => history.push('/')}>
         Log out
         <BoxIcon>
           <Icon.FaArrowRight size={25}></Icon.FaArrowRight>

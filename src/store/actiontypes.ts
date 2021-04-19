@@ -1,0 +1,2 @@
+export const SAVE_ITENS_OF_CART = 'SAVE_ITENS_OF_CART';
+export const SAVE_DATA_OF_USER = 'SAVE_DATA_OF_USER';

@@ -14,8 +14,9 @@ import BoxNumbersAndTypeOfGameSelecteds from '../../components/BoxNumbersAndType
 import Cart from '../../components/Cart';
 import * as Icon from 'react-icons/fa';
 import EmptyCart from '../../assets/emptyCar.png'
-import { parse } from 'node:querystring';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store'
+import { saveDataOfUser, saveItensOfCart } from '../../store/actions'
 interface NewBetProps {
 
 }
@@ -37,6 +38,10 @@ const NewBet: React.FC<NewBetProps> = () => {
   const [numbers, setNumbers] = useState(Array.prototype);
   const [numbersSelecteds, setnumbersSelecteds] = useState(Array.prototype);
   const [numbersSelectedsInCart, setnumbersSelectedsInCart] = useState(Array.prototype);
+
+  const dataLogin = useSelector((state: RootState) => state.userReducer);
+  const dataCart = useSelector((state: RootState) => state.cartReducer);
+  const dispatch = useDispatch();
 
   const [currentGame, setCurrentGame] = useState([{
     type: 'Lotofácil',
@@ -106,7 +111,8 @@ const NewBet: React.FC<NewBetProps> = () => {
     }
 
     setnumbersSelecteds([...currentArray].sort((a, b) => a - b));
-
+    console.log(dataLogin.email);
+    console.log(dataLogin.gamesSelecteds);
   }, [numbersSelecteds]);
 
   const returnPriceTotal = useCallback(() => {
@@ -114,6 +120,8 @@ const NewBet: React.FC<NewBetProps> = () => {
     numbersSelectedsInCart.forEach((element) => { price += element[0].price });
 
     return price;
+
+
   }, [numbersSelectedsInCart]);
 
 
@@ -145,18 +153,12 @@ const NewBet: React.FC<NewBetProps> = () => {
             <TextDescriptionOfBet>{currentGame[0].description}</TextDescriptionOfBet>
           </BoxDescription>
 
-          <BoxNumberAllButtonsArounds>{
-            functionReturnNumber()
-
-
-          }</BoxNumberAllButtonsArounds>
+          <BoxNumberAllButtonsArounds>{functionReturnNumber()}</BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
             <GameActionButton nameButton={'Complete game'} onClick={() => handleCompleteGame()} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} ></GameActionButton>
 
-
             <GameActionButton nameButton={'Clear game'} onClick={() => setnumbersSelecteds([])} backgroundColor={'#fff'} color={'#01AC66'} borderColor={'#01AC66'} marginLeft={'-250px'} ></GameActionButton>
-
 
             <GameActionButton nameButton={'Add to cart'} onClick={() => {
               if (numbersSelecteds.length < currentGame[0]['max-number']) {
@@ -205,7 +207,7 @@ const NewBet: React.FC<NewBetProps> = () => {
             }
           </Cart>
 
-          <ButtonLogin>
+          <ButtonLogin onClick={() => (dispatch(saveItensOfCart('lotofacil', 1, '#000', [1, 2, 3])))}>
             Save
               <BoxIcon>
               <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
