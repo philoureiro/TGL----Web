@@ -65,17 +65,28 @@ export const ButtonNewBet = styled.button`
   background-color: transparent;
 `;
 
-export const BoxIcon = styled.div`
-  margin-left: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
+export const BoxIcon = styled.div`
+  display: flex;
+  height: 40px;
+  width: 50px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+`;
 export const DivAllGamesRecents = styled.div`
   margin-left: 10vw;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+`;
+
+export const BoxInternalCart = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 `;

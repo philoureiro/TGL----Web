@@ -6,13 +6,8 @@ export const saveDataOfUser = (email: string, password: string) => ({
   password: password,
 });
 
-export const saveItensOfCart = (typeGame: string, price: number, color: string, numbersSelecteds: any) => ({
+export const saveItensOfCart = (gamesSelecteds: {}) => ({
   type: SAVE_ITENS_OF_CART,
-  gamesSelecteds: {
-    typeGame: typeGame,
-    price: price,
-    color: color,
-    numbersSelecteds: numbersSelecteds
-  }
+  gamesSelecteds: gamesSelecteds
 });
 

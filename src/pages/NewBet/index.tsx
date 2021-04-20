@@ -16,7 +16,7 @@ import * as Icon from 'react-icons/fa';
 import EmptyCart from '../../assets/emptyCar.png'
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store'
-import { saveDataOfUser, saveItensOfCart } from '../../store/actions'
+import { saveItensOfCart } from '../../store/actions'
 interface NewBetProps {
 
 }
@@ -39,8 +39,7 @@ const NewBet: React.FC<NewBetProps> = () => {
   const [numbersSelecteds, setnumbersSelecteds] = useState(Array.prototype);
   const [numbersSelectedsInCart, setnumbersSelectedsInCart] = useState(Array.prototype);
 
-  const dataLogin = useSelector((state: RootState) => state.userReducer);
-  const dataCart = useSelector((state: RootState) => state.cartReducer);
+  const dataRedux = useSelector((state: RootState) => state.userReducer);
   const dispatch = useDispatch();
 
   const [currentGame, setCurrentGame] = useState([{
@@ -111,8 +110,8 @@ const NewBet: React.FC<NewBetProps> = () => {
     }
 
     setnumbersSelecteds([...currentArray].sort((a, b) => a - b));
-    console.log(dataLogin.email);
-    console.log(dataLogin.gamesSelecteds);
+    console.log(dataRedux.email);
+    console.log(dataRedux.gamesSelecteds);
   }, [numbersSelecteds]);
 
   const returnPriceTotal = useCallback(() => {
@@ -124,6 +123,15 @@ const NewBet: React.FC<NewBetProps> = () => {
 
   }, [numbersSelectedsInCart]);
 
+  const handleClickButtonSave = useCallback(() => {
+    returnPriceTotal() < 10 ? window.alert('Precisamos de ao menos 30 reais em compras para salvarmos...') :
+
+      numbersSelectedsInCart.forEach((element) => {
+        dispatch(saveItensOfCart(element));
+      });
+
+
+  }, [numbersSelectedsInCart]);
 
   return (
     <>
@@ -207,7 +215,7 @@ const NewBet: React.FC<NewBetProps> = () => {
             }
           </Cart>
 
-          <ButtonLogin onClick={() => (dispatch(saveItensOfCart('lotofacil', 1, '#000', [1, 2, 3])))}>
+          <ButtonLogin onClick={() => handleClickButtonSave()}>
             Save
               <BoxIcon>
               <Icon.FaArrowRight size={30}></Icon.FaArrowRight>

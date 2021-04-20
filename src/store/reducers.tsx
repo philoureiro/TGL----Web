@@ -1,3 +1,4 @@
+import { constants } from 'node:buffer';
 import React from 'react';
 import { combineReducers } from 'redux';
 
@@ -16,10 +17,12 @@ interface actionTypes {
 };
 
 
+
 const initialState = {
+  type: '',
   email: 'Philipe',
   password: 'Loureiro',
-  gamesSelecteds: {},
+  gamesSelecteds: [{}]
 }
 
 
@@ -41,7 +44,9 @@ export const cartReducer = (state = initialState, action: actionTypes) => {
   switch (action.type) {
 
     case SAVE_ITENS_OF_CART:
-      return { ...state, gamesSelecteds: (state.gamesSelecteds = action.gamesSelecteds) }
+      const newArray = state.gamesSelecteds;
+      newArray.push(action.gamesSelecteds);
+      return { ...state, gamesSelecteds: newArray }
 
     default:
       return state;
