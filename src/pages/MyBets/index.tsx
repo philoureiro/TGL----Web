@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container, BoxRecentGames, TextRecentGames, TextDataAndPrice,
   ButtonNewBet, BoxIcon, DivAllGamesRecents,
@@ -14,29 +14,54 @@ import { RootState } from '../../store';
 
 interface MyBetsProps {
 
-
 }
+
+interface RecentGamesProps {
+  type: string,
+  color: string,
+  price: number,
+  numbersSelecteds: []
+}
+
+
 
 const MyBets: React.FC<MyBetsProps> = ({ }) => {
 
-  const dataRedux = useSelector((state: RootState) => state.userReducer);
+  const dataRedux = useSelector((state: RootState) => state.userReducer.gamesSelecteds);
+  const [recentGames, setRecentGames] = useState([]);
 
-
-  const handleGamesRecents = useCallback(() => {
-    // if (dataRedux.gamesSelecteds.length > 3) {
-    //   return (
-    //     dataRedux.gamesSelecteds.map((element: any, index) => {
-    //       console.log(element[0].color)
-    //       return (
-    //         <BoxNumbersAndTypeOfGameSelecteds key={index + 1} numberSelecteds={[]} nameOfGame={element.color} markupColor={element.color} dataAndPrice={'dsaf'} />
-    //       )
-    //     })
-    //   );
-    return <BoxIcon>
-      <Icon.FaArrowRight size={25}></Icon.FaArrowRight>
-    </BoxIcon>
-
+  useEffect(() => {
+    // console.log(dataRedux[0]);
+    // if (dataRedux.gamesSelecteds.length >= 3) {
+    //   setRecentGames(dataRedux.gamesSelecteds);
+    // }
   }, [dataRedux]);
+
+
+  const handleRecentGame = useCallback(() => {
+    let i = 0;
+    let currentArray: any = [];
+    // console.log(dataRedux);
+    // while (dataRedux[i] && dataRedux[i] !== undefined) {
+    //   //   console.log('qtd i', i);
+    //   //   console.log('tipo', dataRedux[i]);
+    //   //   i++;
+    //   //   //setRecentGames([dataRedux[i]]);
+    //   //   //currentArray.push(dataRedux[i]);
+    // }
+
+    //console.log(currentArray);
+    return (
+      <BoxIcon>
+        <Icon.FaArrowRight size={25}></Icon.FaArrowRight>
+      </BoxIcon>
+    );
+    //  setRecentGames(...currentArray);
+  }, [dataRedux]);
+
+
+  console.log(dataRedux);
+
   const history = useHistory();
   return (
     <>
@@ -53,7 +78,8 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
             </BoxIcon>
           </ButtonNewBet>
         </BoxRecentGames>
-        <DivAllGamesRecents>{handleGamesRecents()}</DivAllGamesRecents>
+        <DivAllGamesRecents>{handleRecentGame()}</DivAllGamesRecents>
+
       </Container>
       <CopyrightBar />
     </>

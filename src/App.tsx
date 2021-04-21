@@ -11,6 +11,7 @@ import Route from '../src/routes/index';
 
 
 function App() {
+  //console.log(store.getState());
   return (
     <Provider store={store}>
       <BrowserRouter>

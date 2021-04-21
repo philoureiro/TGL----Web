@@ -33,13 +33,14 @@ interface DataProps {
 }
 
 
+
 const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
-  const [numbers, setNumbers] = useState(Array.prototype);
+  const [numbers, setNumbers] = useState([]);
   const [numbersSelecteds, setnumbersSelecteds] = useState(Array.prototype);
   const [numbersSelectedsInCart, setnumbersSelectedsInCart] = useState(Array.prototype);
 
-  const dataRedux = useSelector((state: RootState) => state.userReducer);
+  const dataRedux = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
   const [currentGame, setCurrentGame] = useState([{
@@ -86,13 +87,15 @@ const NewBet: React.FC<NewBetProps> = () => {
   }, [currentGame]);
 
   const handleAddToCart = useCallback((typeOfGameSelected) => {
-    let gameSelected = [{
+    let gameSelected = {
       type: typeOfGameSelected.type,
       price: typeOfGameSelected.price,
       color: typeOfGameSelected.color,
       numbersSelecteds: numbersSelecteds,
-    }]
-    setnumbersSelectedsInCart([...numbersSelectedsInCart, gameSelected]);
+    }
+    const array = numbersSelectedsInCart;
+    array.push(gameSelected);
+    setnumbersSelectedsInCart(array);
     setnumbersSelecteds([]);
   }, [numbersSelecteds]);
 
@@ -101,7 +104,9 @@ const NewBet: React.FC<NewBetProps> = () => {
   }
 
   const handleCompleteGame = useCallback(() => {
+    console.log(typeof numbersSelecteds);
     let currentArray = numbersSelecteds;
+    console.log(numbersSelecteds);
     while (currentArray.length < currentGame[0]['max-number']) {
       const buttonRandom = getRandom(1, currentGame[0].range);
       if (!numbersSelecteds.includes(buttonRandom) && numbersSelecteds.length < currentGame[0]['max-number']) {
@@ -110,13 +115,12 @@ const NewBet: React.FC<NewBetProps> = () => {
     }
 
     setnumbersSelecteds([...currentArray].sort((a, b) => a - b));
-    console.log(dataRedux.email);
-    console.log(dataRedux.gamesSelecteds);
+    console.log(dataRedux);
   }, [numbersSelecteds]);
 
   const returnPriceTotal = useCallback(() => {
     let price = 0;
-    numbersSelectedsInCart.forEach((element) => { price += element[0].price });
+    numbersSelectedsInCart.forEach((element) => { price += element.price });
 
     return price;
 
@@ -124,13 +128,8 @@ const NewBet: React.FC<NewBetProps> = () => {
   }, [numbersSelectedsInCart]);
 
   const handleClickButtonSave = useCallback(() => {
-    returnPriceTotal() < 10 ? window.alert('Precisamos de ao menos 30 reais em compras para salvarmos...') :
-
-      numbersSelectedsInCart.forEach((element) => {
-        dispatch(saveItensOfCart(element));
-      });
-
-
+    //returnPriceTotal() < 10 ? window.alert('Precisamos de ao menos 30 reais em compras para salvarmos...') :
+    dispatch(saveItensOfCart(numbersSelectedsInCart));
   }, [numbersSelectedsInCart]);
 
   return (
@@ -185,6 +184,7 @@ const NewBet: React.FC<NewBetProps> = () => {
         <BoxNewCart>
           <Cart>
             <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
+
             {numbersSelectedsInCart.length === 0
 
               ? <BoxEmptyCart>
@@ -193,14 +193,14 @@ const NewBet: React.FC<NewBetProps> = () => {
 
               :
 
-              numbersSelectedsInCart.map((element: [{ type: string, color: string, price: number, numbersSelecteds: [] }], indice) => {
+              numbersSelectedsInCart.map((element: { type: string, color: string, price: number, numbersSelecteds: [] }, indice) => {
                 let a = 0;
                 return (
                   <BoxInternalCart key={indice + 1}>
                     <BoxIcon onClick={() => { setnumbersSelectedsInCart(numbersSelectedsInCart.filter((e) => e !== element)) }} style={{ marginRight: '10px', marginTop: '20px' }}>
                       <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
                     </BoxIcon>
-                    <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={element[0].numbersSelecteds} nameOfGame={element[0].type} markupColor={element[0].color} dataAndPrice={JSON.stringify(element[0].price)} />
+                    <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={element.numbersSelecteds} nameOfGame={element.type} markupColor={element.color} dataAndPrice={JSON.stringify(element.price)} />
                   </BoxInternalCart>
                 )
               })
@@ -233,3 +233,28 @@ const NewBet: React.FC<NewBetProps> = () => {
 export default NewBet;
 
 
+
+/**
+ *
+ *  {numbersSelectedsInCart.length === 0
+
+              ? <BoxEmptyCart>
+                <Img src={EmptyCart} style={{ width: '500px', marginRight: '40px' }} />
+              </BoxEmptyCart>
+
+              :
+
+              numbersSelectedsInCart.map((element: [{ type: string, color: string, price: number, numbersSelecteds: [] }], indice) => {
+                let a = 0;
+                return (
+                  <BoxInternalCart key={indice + 1}>
+                    <BoxIcon onClick={() => { setnumbersSelectedsInCart(numbersSelectedsInCart.filter((e) => e !== element)) }} style={{ marginRight: '10px', marginTop: '20px' }}>
+                      <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
+                    </BoxIcon>
+                    <BoxNumbersAndTypeOfGameSelecteds numberSelecteds={element[0].numbersSelecteds} nameOfGame={element[0].type} markupColor={element[0].color} dataAndPrice={JSON.stringify(element[0].price)} />
+                  </BoxInternalCart>
+                )
+              })
+            }
+ *
+ */

@@ -8,12 +8,12 @@ interface actionTypes {
   type: string,
   email: string,
   password: string,
-  gamesSelecteds: {
+  gamesSelecteds: [{
     typeGame: string,
     price: number,
     color: string,
     numbersSelecteds: []
-  }
+  }]
 };
 
 
@@ -22,9 +22,8 @@ const initialState = {
   type: '',
   email: 'Philipe',
   password: 'Loureiro',
-  gamesSelecteds: [{}]
+  gamesSelecteds: []
 }
-
 
 
 export const userReducer = (state = initialState, action: actionTypes) => {
@@ -44,9 +43,8 @@ export const cartReducer = (state = initialState, action: actionTypes) => {
   switch (action.type) {
 
     case SAVE_ITENS_OF_CART:
-      const newArray = state.gamesSelecteds;
-      newArray.push(action.gamesSelecteds);
-      return { ...state, gamesSelecteds: newArray }
+      console.log('reducer', action.gamesSelecteds)
+      return { ...state, gamesSelecteds: [...action.gamesSelecteds] }
 
     default:
       return state;
