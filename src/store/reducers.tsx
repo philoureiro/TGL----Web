@@ -12,6 +12,7 @@ interface actionTypes {
   gamesSelecteds: [
     {
       typeGame: string;
+      date: string;
       price: number;
       color: string;
       numbersSelecteds: [];

@@ -25,6 +25,7 @@ interface RecentGamesProps {
   type: string;
   color: string;
   price: number;
+  date: string;
   numbersSelecteds: [];
 }
 
@@ -98,17 +99,23 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
           </ButtonNewBet>
         </BoxRecentGames>
         <DivAllGamesRecents>{
-          recentGames.map((element: RecentGamesProps, index) => {
-            return (
-              <BoxNumbersAndTypeOfGameSelecteds
-                key={index + 1}
-                numberSelecteds={element.numbersSelecteds}
-                nameOfGame={element.type}
-                markupColor={element.color}
-                dataAndPrice={JSON.stringify(element.price)}
-              />
-            );
-          })
+          recentGames.length !== 0 ?
+            recentGames.map((element: RecentGamesProps, index) => {
+              return (
+                <BoxNumbersAndTypeOfGameSelecteds
+                  key={index + 1}
+                  numberSelecteds={element.numbersSelecteds}
+                  nameOfGame={element.type}
+                  markupColor={element.color}
+                  dataAndPrice={`${element.date} - R$ (${element.price})`}
+                />
+              );
+            })
+
+            :
+            <TextRecentGames style={{ marginTop: '150px', fontWeight: 'normal' }}>{`Não existe nenhum jogo salvo com o tipo: ${currentGame[0].type}`}</TextRecentGames>
+
+
         }</DivAllGamesRecents>
       </Container>
       <CopyrightBar />

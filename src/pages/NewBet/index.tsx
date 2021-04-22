@@ -47,6 +47,7 @@ interface IGame {
   numbersSelecteds: number[];
   color: string;
   price: number;
+  date: string;
   type: string;
 }
 
@@ -124,9 +125,13 @@ const NewBet: React.FC<NewBetProps> = () => {
 
   const handleAddToCart = useCallback(
     typeOfGameSelected => {
+      const dataAtual = new Date();
+      const dataFormat = ((dataAtual.getDate())) + "/" + ((dataAtual.getMonth() + 1)) + "/" + dataAtual.getFullYear();
+
       let gameSelected: IGame = {
         type: typeOfGameSelected.type,
         price: typeOfGameSelected.price,
+        date: dataFormat,
         color: typeOfGameSelected.color,
         numbersSelecteds: numbersSelecteds,
       };
@@ -137,6 +142,9 @@ const NewBet: React.FC<NewBetProps> = () => {
     },
     [numbersSelecteds],
   );
+
+  console.log(numbersSelectedsInCart);
+
 
   function getRandom(minValue: number, maxValue: number) {
     return Math.floor(Math.random() * maxValue + minValue);
@@ -185,6 +193,7 @@ const NewBet: React.FC<NewBetProps> = () => {
           </BoxTitle>
 
           <BoxButtonsTypeOfGame>
+
             {data.map((e: { type: string; color: string }, i: number) => {
               return (
                 <TypeOfGameButton
@@ -284,7 +293,7 @@ const NewBet: React.FC<NewBetProps> = () => {
                       numberSelecteds={element.numbersSelecteds}
                       nameOfGame={element.type}
                       markupColor={element.color}
-                      dataAndPrice={JSON.stringify(element.price)}
+                      dataAndPrice={`${element.date} - R$ (${element.price})`}
                     />
                   </BoxInternalCart>
                 );
