@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Container, BoxTypeOfCard, TextTypeOfCard, TextInput,
   ButtonRecoveryPassword, ButtonLogin, BoxIcon
@@ -9,13 +9,41 @@ import CopyrightBar from '../../components/CopyrightBar';
 import BoxInput from '../../components/BoxInput';
 import * as Icon from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { saveDataOfUser } from '../../store/actions';
+import { RootState } from '../../store';
+import * as Yup from 'yup';
 
 interface SignInProps {
 
 }
 
 const SignIn: React.FC<SignInProps> = () => {
+
+  const [textLogin, setTextLogin] = useState('');
+  const [textPassword, setTextPassword] = useState('');
+  const dispatch = useDispatch();
+  const dataRedux = useSelector((state: RootState) => state.userReducer);
+
+  let schema = Yup.object().shape({
+    email: Yup.string().email().required(),
+    password: Yup.string().required().min(6),
+  });
+
+  const handleClickButtonSave = useCallback(() => {
+    try {
+      schema.isValid({
+        email: textLogin,
+        password: textPassword,
+      }).then(function (valid) {
+        !valid ? window.alert('Email ou Senha com formato incorreto! verifique novamente os campos.') :
+          textLogin === dataRedux.email && textPassword === dataRedux.password ? history.push('/mybets') :
+            window.alert('Email ou senha incorretos!');
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [textLogin, textPassword]);
 
   const history = useHistory();
   return (
@@ -27,20 +55,20 @@ const SignIn: React.FC<SignInProps> = () => {
           <TextTypeOfCard>Authentication</TextTypeOfCard>
           <CardInput>
             <BoxInput label={'Email:'} HasIcon={{ size: 20, color: '#fff' }}>
-              <TextInput type={'text'}></TextInput>
+              <TextInput onChange={text => setTextLogin(text.target.value)} type={'text'}></TextInput>
             </BoxInput>
             <BoxInput label={'Password:'} HasIcon={{ size: 20, color: '#fff' }}>
-              <TextInput type={'password'}></TextInput>
+              <TextInput onChange={text => setTextPassword(text.target.value)} type={'password'}></TextInput>
             </BoxInput>
             <ButtonRecoveryPassword onClick={() => history.push('/recovery')}>I forget my password</ButtonRecoveryPassword>
-            <ButtonLogin onClick={() => history.push('/mybets')}>
+            <ButtonLogin onClick={() => handleClickButtonSave()}>
               Log In
               <BoxIcon>
                 <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
               </BoxIcon>
             </ButtonLogin>
           </CardInput>
-          <ButtonLogin onClick={() => { history.push('/signup') }} style={{ color: '#707070' }}>
+          <ButtonLogin onClick={() => history.push('/signup')} style={{ color: '#707070' }}>
             Sign Up
             <BoxIcon>
               <Icon.FaArrowRight size={30}></Icon.FaArrowRight>

@@ -90,3 +90,12 @@ export const BoxInternalCart = styled.div`
   margin-right: 10px;
   margin-bottom: 10px;
 `;
+
+export const BoxButtonsTypeOfGame = styled.div`
+  display: flex;
+  height: 100px;
+  width: 970px;
+  justify-content: flex-start;
+  align-items:  center;
+  overflow-x: auto;
+`;

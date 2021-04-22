@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Container, BoxRecentGames, TextRecentGames, TextDataAndPrice,
-  ButtonNewBet, BoxIcon, DivAllGamesRecents,
+  Container,
+  BoxRecentGames,
+  TextRecentGames,
+  TextDataAndPrice,
+  ButtonNewBet,
+  BoxIcon,
+  DivAllGamesRecents,
+  BoxButtonsTypeOfGame
 } from './styles';
 import CopyrightBar from '../../components/CopyrightBar';
 import Header from '../../components/Header';
@@ -10,57 +16,55 @@ import BoxNumbersAndTypeOfGameSelecteds from '../../components/BoxNumbersAndType
 import * as Icon from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { IMainReducer } from '../../store/reducers';
+import { getDataOfJson } from '../../services/api'
 
-interface MyBetsProps {
-
-}
+interface MyBetsProps { }
 
 interface RecentGamesProps {
-  type: string,
-  color: string,
-  price: number,
-  numbersSelecteds: []
+  type: string;
+  color: string;
+  price: number;
+  numbersSelecteds: [];
 }
 
-
-
 const MyBets: React.FC<MyBetsProps> = ({ }) => {
+  const dataRedux = useSelector(
+    (state: IMainReducer) => state.cartReducer.gamesSelecteds,
+  );
 
-  const dataRedux = useSelector((state: RootState) => state.userReducer.gamesSelecteds);
   const [recentGames, setRecentGames] = useState([]);
 
+  const [currentGame, setCurrentGame] = useState([
+    {
+      type: 'Lotofácil',
+      description:
+        'Escolha 15 números para apostar na lotofácil. Você ganha acertando 11, 12, 13, 14 ou 15 números. São muitas chances de ganhar, e agora você joga de onde estiver!',
+      range: 25,
+      price: 2.5,
+      'max-number': 15,
+      color: '#7F3992',
+      'min-cart-value': 30,
+    },
+  ]);
+
   useEffect(() => {
-    // console.log(dataRedux[0]);
-    // if (dataRedux.gamesSelecteds.length >= 3) {
-    //   setRecentGames(dataRedux.gamesSelecteds);
-    // }
-  }, [dataRedux]);
+    const array = dataRedux.filter((element: RecentGamesProps) => element.type === currentGame[0].type);
+    setRecentGames(array);
+  }, [currentGame]);
 
 
-  const handleRecentGame = useCallback(() => {
-    let i = 0;
-    let currentArray: any = [];
-    // console.log(dataRedux);
-    // while (dataRedux[i] && dataRedux[i] !== undefined) {
-    //   //   console.log('qtd i', i);
-    //   //   console.log('tipo', dataRedux[i]);
-    //   //   i++;
-    //   //   //setRecentGames([dataRedux[i]]);
-    //   //   //currentArray.push(dataRedux[i]);
-    // }
+  const data = getDataOfJson();
 
-    //console.log(currentArray);
-    return (
-      <BoxIcon>
-        <Icon.FaArrowRight size={25}></Icon.FaArrowRight>
-      </BoxIcon>
-    );
-    //  setRecentGames(...currentArray);
-  }, [dataRedux]);
+  const handleClickButtonTypeGame = useCallback(
+    nameButton => {
+      const dataCurrent = data.filter(e => e.type === nameButton);
+      setCurrentGame(dataCurrent);
+    },
+    [currentGame],
+  );
 
 
-  console.log(dataRedux);
 
   const history = useHistory();
   return (
@@ -70,6 +74,21 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
         <BoxRecentGames>
           <TextRecentGames>RECENT GAMES</TextRecentGames>
           <TextDataAndPrice>Filters</TextDataAndPrice>
+          <BoxButtonsTypeOfGame>
+            {data.map((e: { type: string; color: string }, i: number) => {
+              return (
+                <TypeOfGameButton
+                  currentGame={currentGame}
+                  onClick={() => handleClickButtonTypeGame(e.type)}
+                  key={i + 1}
+                  backgroundColor={'#fff'}
+                  borderColor={e.color}
+                  color={e.color}
+                  nameButton={e.type}
+                ></TypeOfGameButton>
+              );
+            })}
+          </BoxButtonsTypeOfGame>
 
           <ButtonNewBet onClick={() => history.push('/newbet')}>
             New Bet
@@ -78,13 +97,23 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
             </BoxIcon>
           </ButtonNewBet>
         </BoxRecentGames>
-        <DivAllGamesRecents>{handleRecentGame()}</DivAllGamesRecents>
-
+        <DivAllGamesRecents>{
+          recentGames.map((element: RecentGamesProps, index) => {
+            return (
+              <BoxNumbersAndTypeOfGameSelecteds
+                key={index + 1}
+                numberSelecteds={element.numbersSelecteds}
+                nameOfGame={element.type}
+                markupColor={element.color}
+                dataAndPrice={JSON.stringify(element.price)}
+              />
+            );
+          })
+        }</DivAllGamesRecents>
       </Container>
       <CopyrightBar />
     </>
   );
 };
-
 
 export default MyBets;
