@@ -66,6 +66,7 @@ export const ButtonLogin = styled.button`
   justify-content: space-between;
   align-items: center;
   display: flex;
+  cursor: pointer;
 `;
 
 export const BoxIcon = styled.div`

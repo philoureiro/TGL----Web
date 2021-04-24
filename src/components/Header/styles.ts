@@ -20,6 +20,7 @@ export const ButtonAccount = styled.button`
   outline: none;
   border: none;
   background-color: transparent;
+  cursor: pointer;
 `;
 
 export const BoxLogo = styled.div`
@@ -50,7 +51,7 @@ export const MarkupLogo = styled.div`
    background-color: #B5C401;
 `;
 
-export const ButtonExit = styled.button`
+export const ButtonLogout = styled.button`
   margin-left: -35vw;
   display: flex;
   align-items: center;
@@ -63,6 +64,7 @@ export const ButtonExit = styled.button`
   border: none;
   outline: none;
   background-color: transparent;
+  cursor: pointer;
 `;
 
 export const BoxIcon = styled.div`

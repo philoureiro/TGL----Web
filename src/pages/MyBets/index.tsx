@@ -107,7 +107,7 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
                   numberSelecteds={element.numbersSelecteds}
                   nameOfGame={element.type}
                   markupColor={element.color}
-                  dataAndPrice={`${element.date} - R$ (${element.price})`}
+                  dataAndPrice={`${element.date} - R$ (${element.price.toFixed(2).replace('.', ',')})`}
                 />
               );
             })

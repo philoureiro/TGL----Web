@@ -13,6 +13,7 @@ export const Container = styled.div`
   border-bottom-style: solid;
   border-bottom-width: 5px;
   border-bottom-color: #EBEBEB;
+  cursor: pointer;
 
 `;
 

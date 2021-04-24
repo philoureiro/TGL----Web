@@ -18,6 +18,7 @@ import {
   BoxDescription,
   BoxEmptyCart,
   Img,
+  PriceTotalOfGames
 } from './styles';
 import { getDataOfJson } from '../../services/api';
 import CopyrightBar from '../../components/CopyrightBar';
@@ -168,11 +169,13 @@ const NewBet: React.FC<NewBetProps> = () => {
       price += element.price;
     });
 
-    return price;
+
+
+    return price.toFixed(2).replace('.', ',');
   }, [numbersSelectedsInCart]);
 
   const handleClickButtonSave = useCallback(() => {
-    if (returnPriceTotal() >= 30) {
+    if (returnPriceTotal() >= '30') {
       dispatch(saveItensOfCart(numbersSelectedsInCart));
       setnumbersSelectedsInCart([]);
     } else {
@@ -184,6 +187,7 @@ const NewBet: React.FC<NewBetProps> = () => {
     <>
       <Header />
       <Container>
+
         <BoxNewBet>
           <BoxTitle>
             <TextNewBet>NEW BET</TextNewBet>
@@ -194,7 +198,6 @@ const NewBet: React.FC<NewBetProps> = () => {
           </BoxTitle>
 
           <BoxButtonsTypeOfGame>
-
             {data.map((e: { type: string; color: string }, i: number) => {
               return (
                 <TypeOfGameButton
@@ -262,9 +265,11 @@ const NewBet: React.FC<NewBetProps> = () => {
               </BoxIcon>
             </GameActionButton>
           </BoxActionsButtons>
+
         </BoxNewBet>
 
         <BoxNewCart>
+
           <Cart>
             <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
 
@@ -294,17 +299,19 @@ const NewBet: React.FC<NewBetProps> = () => {
                       numberSelecteds={element.numbersSelecteds}
                       nameOfGame={element.type}
                       markupColor={element.color}
-                      dataAndPrice={`${element.date} - R$ (${element.price})`}
+                      dataAndPrice={`${element.date} - R$ (${element.price.toFixed(2).replace('.', ',')})`}
                     />
                   </BoxInternalCart>
                 );
               })
             )}
 
+
+          </Cart>
+          <PriceTotalOfGames>
             {numbersSelectedsInCart.length > 0 ? (
               <BoxInternalCart
-                style={{ justifyContent: 'left', alignItems: 'flex-end' }}
-              >
+                style={{ justifyContent: 'left', alignItems: 'flex-end' }}>
                 <TextNewBet style={{ marginLeft: '20px' }}>CART</TextNewBet>
                 <TextFor style={{ marginLeft: '20px', fontStyle: 'normal' }}>
                   TOTAL:
@@ -315,15 +322,16 @@ const NewBet: React.FC<NewBetProps> = () => {
                 </TextFor>
               </BoxInternalCart>
             ) : null}
-          </Cart>
-
+          </PriceTotalOfGames>
           <ButtonLogin onClick={() => handleClickButtonSave()}>
             Save
             <BoxIcon>
               <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
             </BoxIcon>
           </ButtonLogin>
+
         </BoxNewCart>
+
       </Container>
       <CopyrightBar />
     </>

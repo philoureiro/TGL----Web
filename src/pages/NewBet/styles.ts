@@ -64,7 +64,7 @@ export const ButtonLogin = styled.button`
   display: flex;
   height: 120px;
   width: 100%;
-
+  cursor: pointer;
   &:hover{
         background: ${shade(0.1, '#E2E2E2')};
       }
@@ -168,6 +168,7 @@ export const BoxIcon = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 10px;
+  cursor: pointer;
 `;
 
 
@@ -190,3 +191,12 @@ export const BoxEmptyCart = styled.div`
 
 export const Img = styled.img`
 `;
+
+export const PriceTotalOfGames = styled.div`
+  background-color: white;;
+  display: flex;
+  height: 100px;
+  width: 100%;
+  justify-content: left;
+  align-items: center;
+  `;

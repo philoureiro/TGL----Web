@@ -10,6 +10,7 @@ export const Container = styled.button`
   justify-content: center;
   display: flex;
   outline: none;
+  cursor: pointer;
 `;
 
 

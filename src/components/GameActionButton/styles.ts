@@ -11,6 +11,7 @@ export const Container = styled.button`
   border-width: 3px;
   border-style: solid;
   outline: none;
+  cursor: pointer;
   &:hover{
         background: ${shade(0.1, '#E2E2E2')};
       }

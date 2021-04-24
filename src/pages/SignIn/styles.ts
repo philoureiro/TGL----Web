@@ -50,6 +50,7 @@ export const ButtonRecoveryPassword = styled.button`
   background-color: transparent;
   margin-left: 150px;
   margin-top: 30px;
+  cursor: pointer;
 `;
 
 export const ButtonLogin = styled.button`
@@ -66,6 +67,7 @@ export const ButtonLogin = styled.button`
   justify-content: space-between;
   align-items: center;
   display: flex;
+  cursor: pointer;
 `;
 
 export const BoxIcon = styled.div`
