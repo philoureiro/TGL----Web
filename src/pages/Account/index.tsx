@@ -10,6 +10,11 @@ import BoxInput from '../../components/BoxInput';
 import * as Icon from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
+import Header from '../../components/Header';
+import { useSelector, useDispatch } from 'react-redux';
+import { IMainReducer } from '../../store/reducers';
+import { saveDataOfUser } from '../../store/actions';
+
 
 
 interface RecoveryPasswordProps {
@@ -19,21 +24,37 @@ interface RecoveryPasswordProps {
 const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
 
   const [textEmail, setTextEmail] = useState('');
+  const [textName, setTextName] = useState('');
+  const [textPassword, setTextPassword] = useState('');
+
+  console.log(textEmail, textName, textPassword);
+
+  const dispatch = useDispatch();
+  const dataRedux = useSelector(
+    (state: IMainReducer) => state.userReducer,
+  );
+  console.log(dataRedux);
+  console.log(textPassword);
+
 
   let schema = Yup.object().shape({
     email: Yup.string().email().required(),
+    name: Yup.string().required(),
+    password: Yup.string().required().min(6),
   });
 
   const handleClickButtonRecovery = useCallback(() => {
     try {
       schema.isValid({
         email: textEmail,
+        name: textName,
+        password: textPassword,
       }).then(function (valid) {
         if (!valid) {
-          window.alert('Email com formato incorreto! verifique novamente os campos.');
+          window.alert('Dados inválidos ou repetidos! verifique...');
         } else {
-          window.alert('Email enviado com sucesso!');
-          history.push('/');
+          dispatch(saveDataOfUser(textName, textEmail, textPassword));
+          window.alert('Dados alterados com sucesso!');
         }
       });
     } catch (error) {
@@ -44,17 +65,24 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
   const history = useHistory();
   return (
     <>
+      <Header />
       <Container>
         <BoxLogoTheGreatestApp />
 
         <BoxTypeOfCard>
-          <TextTypeOfCard>Reset password</TextTypeOfCard>
+          <TextTypeOfCard>Change your data</TextTypeOfCard>
           <CardInput>
+            <BoxInput label={'Name:'}>
+              <TextInput placeholder={dataRedux.name} onChange={text => setTextName(text.target.value)} type={'text'}></TextInput>
+            </BoxInput>
             <BoxInput label={'Email:'}>
-              <TextInput onChange={text => setTextEmail(text.target.value)} type={'text'}></TextInput>
+              <TextInput placeholder={dataRedux.email} onChange={text => setTextEmail(text.target.value)} type={'text'}></TextInput>
+            </BoxInput>
+            <BoxInput label={'Password:'}>
+              <TextInput type={'password'} onChange={text => setTextPassword(text.target.value)} ></TextInput>
             </BoxInput>
             <ButtonLogin onClick={() => { handleClickButtonRecovery() }}>
-              Send link
+              Update
               <BoxIcon>
                 <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
               </BoxIcon>

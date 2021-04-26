@@ -59,13 +59,13 @@ const SignUp: React.FC<SignUpProps> = () => {
         <BoxTypeOfCard>
           <TextTypeOfCard>Registration</TextTypeOfCard>
           <CardInput>
-            <BoxInput label={'Name:'} HasIcon={{ size: 20, color: '#fff' }}>
+            <BoxInput label={'Name:'}>
               <TextInput onChange={text => setTextName(text.target.value)} type={'text'}></TextInput>
             </BoxInput>
-            <BoxInput label={'Email:'} HasIcon={{ size: 20, color: '#fff' }}>
+            <BoxInput label={'Email:'} >
               <TextInput onChange={text => setTextLogin(text.target.value)} type={'text'}></TextInput>
             </BoxInput>
-            <BoxInput label={'Password:'} HasIcon={{ size: 20, color: '#fff' }}>
+            <BoxInput label={'Password:'}>
               <TextInput onChange={text => setTextPassword(text.target.value)} type={'password'}></TextInput>
             </BoxInput>
             <ButtonLogin onClick={() => handleClickButtonRegister()}>

@@ -33,6 +33,8 @@ import EmptyCart from '../../assets/emptyCar.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { saveItensOfCart } from '../../store/actions';
+import { useHistory } from 'react-router-dom';
+
 interface NewBetProps { }
 interface DataProps {
   type: string;
@@ -59,22 +61,10 @@ const NewBet: React.FC<NewBetProps> = () => {
   const [numbersSelectedsInCart, setnumbersSelectedsInCart] = useState<IGame[]>(
     [],
   );
+  const [currentGame, setCurrentGame] = useState<DataProps[]>(data);
 
-
+  const history = useHistory();
   const dispatch = useDispatch();
-
-  const [currentGame, setCurrentGame] = useState([
-    {
-      type: 'Lotofácil',
-      description:
-        'Escolha 15 números para apostar na lotofácil. Você ganha acertando 11, 12, 13, 14 ou 15 números. São muitas chances de ganhar, e agora você joga de onde estiver!',
-      range: 25,
-      price: 2.5,
-      'max-number': 15,
-      color: '#7F3992',
-      'min-cart-value': 30,
-    },
-  ]);
 
   useEffect(() => {
     let arrayOfButtons: any = [];
@@ -178,6 +168,7 @@ const NewBet: React.FC<NewBetProps> = () => {
     if (returnPriceTotal() >= '30') {
       dispatch(saveItensOfCart(numbersSelectedsInCart));
       setnumbersSelectedsInCart([]);
+      history.push('/mybets');
     } else {
       window.alert('Precisamos de ao menos 30 reais em compras para salvarmos...');
     }

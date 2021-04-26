@@ -14,9 +14,10 @@ interface TypeOfGameButtonProps {
 }
 
 const TypeOfGameButton: React.FC<TypeOfGameButtonProps> = ({ currentGame, nameButton, backgroundColor, color, borderColor, onClick }) => {
+
   return (
-    <Container onClick={onClick} style={{ backgroundColor: currentGame[0].type === nameButton ? currentGame[0].color : '#fff', borderColor: borderColor }}>
-      <ButtonText style={{ color: currentGame[0].type === nameButton ? '#fff' : color }}>{nameButton}</ButtonText>
+    <Container onClick={onClick} style={{ backgroundColor: currentGame[0] && currentGame[0].type === nameButton ? currentGame[0].color : '#fff', borderColor: borderColor }}>
+      <ButtonText style={{ color: currentGame[0] && currentGame[0].type === nameButton ? '#fff' : color }}>{nameButton}</ButtonText>
     </Container>
   );
 }

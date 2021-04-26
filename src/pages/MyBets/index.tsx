@@ -29,6 +29,16 @@ interface RecentGamesProps {
   numbersSelecteds: [];
 }
 
+interface currentGameProps {
+  type: string;
+  description: string;
+  range: number;
+  price: number;
+  'max-number': number;
+  color: string;
+  'min-cart-value': number
+}
+
 const MyBets: React.FC<MyBetsProps> = ({ }) => {
   const dataRedux = useSelector(
     (state: IMainReducer) => state.cartReducer.gamesSelecteds,
@@ -36,22 +46,20 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
 
   const [recentGames, setRecentGames] = useState([]);
 
-  const [currentGame, setCurrentGame] = useState([
-    {
-      type: 'Lotofácil',
-      description:
-        'Escolha 15 números para apostar na lotofácil. Você ganha acertando 11, 12, 13, 14 ou 15 números. São muitas chances de ganhar, e agora você joga de onde estiver!',
-      range: 25,
-      price: 2.5,
-      'max-number': 15,
-      color: '#7F3992',
-      'min-cart-value': 30,
-    },
-  ]);
+  const [currentGame, setCurrentGame] = useState<currentGameProps[]>([]);
+
 
   useEffect(() => {
-    const array = dataRedux.filter((element: RecentGamesProps) => element.type === currentGame[0].type);
-    setRecentGames(array);
+    let array;
+    if (currentGame[0]) {
+      array = dataRedux.filter((element: RecentGamesProps) => element.type === currentGame[0].type)
+      setRecentGames(array);
+    } else {
+      array = dataRedux;
+      setRecentGames(array);
+    }
+
+
   }, [currentGame]);
 
 
@@ -64,9 +72,6 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
     },
     [currentGame],
   );
-
-
-
   const history = useHistory();
   return (
     <>
@@ -76,19 +81,20 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
           <TextRecentGames>RECENT GAMES</TextRecentGames>
           <TextDataAndPrice>Filters</TextDataAndPrice>
           <BoxButtonsTypeOfGame>
-            {data.map((e: { type: string; color: string }, i: number) => {
-              return (
-                <TypeOfGameButton
-                  currentGame={currentGame}
-                  onClick={() => handleClickButtonTypeGame(e.type)}
-                  key={i + 1}
-                  backgroundColor={'#fff'}
-                  borderColor={e.color}
-                  color={e.color}
-                  nameButton={e.type}
-                ></TypeOfGameButton>
-              );
-            })}
+            {
+              data.map((e: { type: string; color: string }, i: number) => {
+                return (
+                  <TypeOfGameButton
+                    currentGame={currentGame}
+                    onClick={() => handleClickButtonTypeGame(e.type)}
+                    key={i + 1}
+                    backgroundColor={'#fff'}
+                    borderColor={e.color}
+                    color={e.color}
+                    nameButton={e.type}
+                  ></TypeOfGameButton>
+                );
+              })}
           </BoxButtonsTypeOfGame>
 
           <ButtonNewBet onClick={() => history.push('/newbet')}>
@@ -113,7 +119,7 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
             })
 
             :
-            <TextRecentGames style={{ marginTop: '150px', fontWeight: 'normal' }}>{`Não existe nenhum jogo salvo com o tipo: ${currentGame[0].type}`}</TextRecentGames>
+            <TextRecentGames style={{ marginTop: '150px', fontWeight: 'normal' }}>{`Não existe nenhum jogo salvo!`}</TextRecentGames>
 
 
         }</DivAllGamesRecents>

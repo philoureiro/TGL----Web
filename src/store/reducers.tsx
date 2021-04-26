@@ -31,8 +31,8 @@ interface IState {
 const initialState: IState = {
   type: '',
   name: '',
-  email: 'Philipe',
-  password: 'Loureiro',
+  email: '',
+  password: '',
   gamesSelecteds: [],
 };
 
@@ -45,7 +45,7 @@ export interface IMainReducer {
 export const userReducer = (state: IState = initialState, action: actionTypes) => {
   switch (action.type) {
     case SAVE_DATA_OF_USER:
-      console.log('reducer ', action);
+      console.log(action.password)
       return {
         ...state,
         name: (state.name = action.name),

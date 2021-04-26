@@ -54,10 +54,10 @@ const SignIn: React.FC<SignInProps> = () => {
         <BoxTypeOfCard>
           <TextTypeOfCard>Authentication</TextTypeOfCard>
           <CardInput>
-            <BoxInput label={'Email:'} HasIcon={{ size: 20, color: '#fff' }}>
+            <BoxInput label={'Email:'}>
               <TextInput onChange={text => setTextLogin(text.target.value)} type={'text'}></TextInput>
             </BoxInput>
-            <BoxInput label={'Password:'} HasIcon={{ size: 20, color: '#fff' }}>
+            <BoxInput label={'Password:'}>
               <TextInput onChange={text => setTextPassword(text.target.value)} type={'password'}></TextInput>
             </BoxInput>
             <ButtonRecoveryPassword onClick={() => history.push('/recovery')}>I forget my password</ButtonRecoveryPassword>

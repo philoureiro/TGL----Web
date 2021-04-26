@@ -5,13 +5,9 @@ import * as Icon from 'react-icons/fa';
 interface BoxInputProps {
   children: any;
   label: string;
-  HasIcon?: {
-    size: number,
-    color: string
-  }
 }
 
-const BoxInput: React.FC<BoxInputProps> = ({ children, label, HasIcon }) => {
+const BoxInput: React.FC<BoxInputProps> = ({ children, label }) => {
   return (
     <Container>
       <Div>
