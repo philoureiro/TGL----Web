@@ -7,6 +7,7 @@ import CardInput from '../../components/CardInput';
 import BoxLogoTheGreatestApp from '../../components/BoxLogoTheGreatestApp';
 import CopyrightBar from '../../components/CopyrightBar';
 import BoxInput from '../../components/BoxInput';
+import Toast from '../../components/Toast';
 import * as Icon from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,12 +19,19 @@ interface SignInProps {
 
 }
 
+interface ToastProps {
+  showToast: boolean;
+  message: string;
+  color: string;
+}
+
 const SignIn: React.FC<SignInProps> = () => {
 
   const [textLogin, setTextLogin] = useState('');
   const [textPassword, setTextPassword] = useState('');
   const dispatch = useDispatch();
   const dataRedux = useSelector((state: RootState) => state.userReducer);
+  const [showToast, setShowToast] = useState<ToastProps>();
 
   let schema = Yup.object().shape({
     email: Yup.string().email().required(),
@@ -36,10 +44,13 @@ const SignIn: React.FC<SignInProps> = () => {
         email: textLogin,
         password: textPassword,
       }).then(function (valid) {
-        !valid ? window.alert('Email ou Senha com formato incorreto! verifique novamente os campos.') :
+        !valid ? setShowToast({ showToast: true, message: 'Dados digitados em formato incorreto!', color: 'red' }) :
           textLogin === dataRedux.email && textPassword === dataRedux.password ? history.push('/mybets') :
-            window.alert('Email ou senha incorretos!');
+            setShowToast({ showToast: true, message: 'Email ou Senha incorreto!', color: 'red' });
       });
+      window.setTimeout(function () {
+        setShowToast({ showToast: false, message: '', color: '' });
+      }, 3000);
     } catch (error) {
       console.log(error);
     }
@@ -75,6 +86,12 @@ const SignIn: React.FC<SignInProps> = () => {
             </BoxIcon>
           </ButtonLogin>
         </BoxTypeOfCard>
+        {showToast?.showToast ? <Toast borderColor={showToast.color} textToast={showToast.message}>
+          <BoxIcon>
+            <Icon.FaInfoCircle size={30} color={showToast.color} ></Icon.FaInfoCircle>
+          </BoxIcon>
+        </Toast> : null}
+
       </Container>
       <CopyrightBar />
     </>

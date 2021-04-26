@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Container, BoxTypeOfCard, TextTypeOfCard, TextInput,
   ButtonRecoveryPassword, ButtonLogin, BoxIcon
@@ -14,6 +14,7 @@ import Header from '../../components/Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { IMainReducer } from '../../store/reducers';
 import { saveDataOfUser } from '../../store/actions';
+import Toast from '../../components/Toast';
 
 
 
@@ -21,29 +22,37 @@ interface RecoveryPasswordProps {
 
 }
 
+interface ToastProps {
+  showToast: boolean;
+  message: string;
+  color: string;
+}
+
 const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
-
-  const [textEmail, setTextEmail] = useState('');
-  const [textName, setTextName] = useState('');
-  const [textPassword, setTextPassword] = useState('');
-
-  console.log(textEmail, textName, textPassword);
 
   const dispatch = useDispatch();
   const dataRedux = useSelector(
     (state: IMainReducer) => state.userReducer,
   );
-  console.log(dataRedux);
-  console.log(textPassword);
 
+  const [textEmail, setTextEmail] = useState('');
+  const [textName, setTextName] = useState('');
+  const [textPassword, setTextPassword] = useState('');
+  const [showToast, setShowToast] = useState<ToastProps>();
+
+  useEffect(() => {
+    setTextName(dataRedux.name);
+    setTextEmail(dataRedux.email);
+    setTextPassword(dataRedux.password);
+  }, [dataRedux]);
 
   let schema = Yup.object().shape({
+    name: Yup.string().required().min(6),
     email: Yup.string().email().required(),
-    name: Yup.string().required(),
     password: Yup.string().required().min(6),
   });
 
-  const handleClickButtonRecovery = useCallback(() => {
+  const handleClickButtonUpdate = useCallback(() => {
     try {
       schema.isValid({
         email: textEmail,
@@ -51,11 +60,15 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
         password: textPassword,
       }).then(function (valid) {
         if (!valid) {
-          window.alert('Dados inválidos ou repetidos! verifique...');
+          setShowToast({ showToast: true, message: 'Dados digitados em formato incorreto!', color: 'red' });
         } else {
           dispatch(saveDataOfUser(textName, textEmail, textPassword));
-          window.alert('Dados alterados com sucesso!');
+          setShowToast({ showToast: true, message: 'Dados alterados com sucesso!', color: 'green' });
         }
+        window.setTimeout(function () {
+          setShowToast({ showToast: false, message: '', color: '' });
+        }, 3000);
+
       });
     } catch (error) {
       console.log(error);
@@ -81,7 +94,7 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
             <BoxInput label={'Password:'}>
               <TextInput type={'password'} onChange={text => setTextPassword(text.target.value)} ></TextInput>
             </BoxInput>
-            <ButtonLogin onClick={() => { handleClickButtonRecovery() }}>
+            <ButtonLogin onClick={() => { handleClickButtonUpdate() }}>
               Update
               <BoxIcon>
                 <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
@@ -95,6 +108,12 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
            Back
           </ButtonLogin>
         </BoxTypeOfCard>
+        {showToast?.showToast ? <Toast borderColor={showToast.color} textToast={showToast.message}>
+          <BoxIcon>
+            <Icon.FaInfoCircle size={30} color={showToast.color} ></Icon.FaInfoCircle>
+          </BoxIcon>
+        </Toast> : null}
+
       </Container>
       <CopyrightBar />
     </>

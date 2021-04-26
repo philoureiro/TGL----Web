@@ -45,7 +45,6 @@ export interface IMainReducer {
 export const userReducer = (state: IState = initialState, action: actionTypes) => {
   switch (action.type) {
     case SAVE_DATA_OF_USER:
-      console.log(action.password)
       return {
         ...state,
         name: (state.name = action.name),

@@ -12,9 +12,16 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { saveDataOfUser } from '../../store/actions'
 import * as Yup from 'yup';
+import Toast from '../../components/Toast';
 
 interface SignUpProps {
 
+}
+
+interface ToastProps {
+  showToast: boolean;
+  message: string;
+  color: string;
 }
 
 const SignUp: React.FC<SignUpProps> = () => {
@@ -23,6 +30,7 @@ const SignUp: React.FC<SignUpProps> = () => {
   const [textLogin, setTextLogin] = useState('');
   const [textPassword, setTextPassword] = useState('');
   const dispatch = useDispatch();
+  const [showToast, setShowToast] = useState<ToastProps>();
 
   let schema = Yup.object().shape({
     name: Yup.string().required().min(6),
@@ -38,13 +46,18 @@ const SignUp: React.FC<SignUpProps> = () => {
         password: textPassword,
       }).then(function (valid) {
         if (!valid) {
-          window.alert('Nome, Email ou Senha com formato incorreto! verifique novamente os campos.');
+          setShowToast({ showToast: true, message: 'Dados digitados em formato incorreto!', color: 'red' });
         } else {
           dispatch(saveDataOfUser(textName, textLogin, textPassword))
-          window.alert('Usuário cadastrado com sucesso!');
-          history.push('/');
+          setShowToast({ showToast: true, message: 'Usuário cadastrado com sucesso!', color: 'green' })
+          window.setTimeout(function () {
+            history.push('/');
+          }, 1000);
         }
       });
+      window.setTimeout(function () {
+        setShowToast({ showToast: false, message: '', color: '' });
+      }, 3000);
     } catch (error) {
       console.log(error);
     }
@@ -83,6 +96,11 @@ const SignUp: React.FC<SignUpProps> = () => {
 
           </ButtonLogin>
         </BoxTypeOfCard>
+        {showToast?.showToast ? <Toast borderColor={showToast.color} textToast={showToast.message}>
+          <BoxIcon>
+            <Icon.FaInfoCircle size={30} color={showToast.color} ></Icon.FaInfoCircle>
+          </BoxIcon>
+        </Toast> : null}
       </Container>
       <CopyrightBar />
     </>

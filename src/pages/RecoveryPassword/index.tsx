@@ -10,15 +10,24 @@ import BoxInput from '../../components/BoxInput';
 import * as Icon from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
+import Toast from '../../components/Toast';
 
 
 interface RecoveryPasswordProps {
 
 }
 
+
+interface ToastProps {
+  showToast: boolean;
+  message: string;
+  color: string;
+}
+
 const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
 
   const [textEmail, setTextEmail] = useState('');
+  const [showToast, setShowToast] = useState<ToastProps>();
 
   let schema = Yup.object().shape({
     email: Yup.string().email().required(),
@@ -30,12 +39,17 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
         email: textEmail,
       }).then(function (valid) {
         if (!valid) {
-          window.alert('Email com formato incorreto! verifique novamente os campos.');
+          setShowToast({ showToast: true, message: 'Dados digitados em formato incorreto!', color: 'red' });
         } else {
-          window.alert('Email enviado com sucesso!');
-          history.push('/');
+          setShowToast({ showToast: true, message: 'Email enviado com sucesso!', color: 'green' })
+          window.setTimeout(function () {
+            history.push('/');
+          }, 1000);
         }
       });
+      window.setTimeout(function () {
+        setShowToast({ showToast: false, message: '', color: '' });
+      }, 3000);
     } catch (error) {
       console.log(error);
     }
@@ -67,6 +81,11 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
            Back
           </ButtonLogin>
         </BoxTypeOfCard>
+        {showToast?.showToast ? <Toast borderColor={showToast.color} textToast={showToast.message}>
+          <BoxIcon>
+            <Icon.FaInfoCircle size={30} color={showToast.color} ></Icon.FaInfoCircle>
+          </BoxIcon>
+        </Toast> : null}
       </Container>
       <CopyrightBar />
     </>

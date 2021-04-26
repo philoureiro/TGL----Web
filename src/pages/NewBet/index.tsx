@@ -34,6 +34,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { saveItensOfCart } from '../../store/actions';
 import { useHistory } from 'react-router-dom';
+import Toast from '../../components/Toast';
 
 interface NewBetProps { }
 interface DataProps {
@@ -54,6 +55,13 @@ interface IGame {
   type: string;
 }
 
+interface ToastProps {
+  showToast: boolean;
+  message: string;
+  color: string;
+}
+
+
 const NewBet: React.FC<NewBetProps> = () => {
   const data = getDataOfJson();
   const [numbers, setNumbers] = useState([]);
@@ -62,6 +70,7 @@ const NewBet: React.FC<NewBetProps> = () => {
     [],
   );
   const [currentGame, setCurrentGame] = useState<DataProps[]>(data);
+  const [showToast, setShowToast] = useState<ToastProps>();
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -75,6 +84,7 @@ const NewBet: React.FC<NewBetProps> = () => {
 
     setNumbers(arrayOfButtons);
     setnumbersSelecteds([]);
+
   }, [currentGame]);
 
   const HandleSelected = useCallback(
@@ -165,12 +175,15 @@ const NewBet: React.FC<NewBetProps> = () => {
   }, [numbersSelectedsInCart]);
 
   const handleClickButtonSave = useCallback(() => {
-    if (returnPriceTotal() >= '30') {
+    if (parseFloat(returnPriceTotal()) >= 30) {
       dispatch(saveItensOfCart(numbersSelectedsInCart));
       setnumbersSelectedsInCart([]);
       history.push('/mybets');
     } else {
-      window.alert('Precisamos de ao menos 30 reais em compras para salvarmos...');
+      setShowToast({ showToast: true, message: 'Precisamos de ao menos 30 reais em compras para salvarmos...', color: 'red' });
+      window.setTimeout(function () {
+        setShowToast({ showToast: false, message: '', color: '' });
+      }, 3000);
     }
   }, [numbersSelectedsInCart]);
 
@@ -237,9 +250,11 @@ const NewBet: React.FC<NewBetProps> = () => {
               nameButton={'Add to cart'}
               onClick={() => {
                 if (numbersSelecteds.length < currentGame[0]['max-number']) {
-                  window.alert(
-                    `São necessários ao menos ${currentGame[0]['max-number']} números selecionados para adicionar ao carrinho!`,
-                  );
+                  setShowToast({ showToast: true, message: `São necessários ao menos ${currentGame[0]['max-number']} números selecionados para adicionar ao carrinho!`, color: 'red' });
+                  window.setTimeout(function () {
+                    // setShowToast({ showToast: false, message: '', color: '' });
+                  }, 3000);
+
                 } else {
                   handleAddToCart(currentGame[0]);
                 }
@@ -322,7 +337,11 @@ const NewBet: React.FC<NewBetProps> = () => {
           </ButtonLogin>
 
         </BoxNewCart>
-
+        {showToast?.showToast ? <Toast borderColor={showToast.color} textToast={showToast.message}>
+          <BoxIcon>
+            <Icon.FaInfoCircle size={30} color={showToast.color} ></Icon.FaInfoCircle>
+          </BoxIcon>
+        </Toast> : null}
       </Container>
       <CopyrightBar />
     </>
