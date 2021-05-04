@@ -14,11 +14,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveDataOfUser } from '../../store/actions';
 import { RootState } from '../../store';
 import * as Yup from 'yup';
+import api from '../../services/api'
 
 interface SignInProps {
 
 }
 
+interface SignInFormData {
+  email: string;
+  password: string;
+}
 interface ToastProps {
   showToast: boolean;
   message: string;
@@ -33,28 +38,34 @@ const SignIn: React.FC<SignInProps> = () => {
   const dataRedux = useSelector((state: RootState) => state.userReducer);
   const [showToast, setShowToast] = useState<ToastProps>();
 
-  let schema = Yup.object().shape({
-    email: Yup.string().email().required(),
-    password: Yup.string().required().min(6),
-  });
 
-  const handleClickButtonSave = useCallback(() => {
-    try {
-      schema.isValid({
-        email: textLogin,
-        password: textPassword,
-      }).then(function (valid) {
-        !valid ? setShowToast({ showToast: true, message: 'Dados digitados em formato incorreto!', color: 'red' }) :
-          textLogin === dataRedux.email && textPassword === dataRedux.password ? history.push('/mybets') :
-            setShowToast({ showToast: true, message: 'Email ou Senha incorreto!', color: 'red' });
-      });
-      window.setTimeout(function () {
-        setShowToast({ showToast: false, message: '', color: '' });
-      }, 3000);
-    } catch (error) {
-      console.log(error);
+  const handleClickButtonSave = useCallback(async () => {
+    let schema = Yup.object().shape({
+      email: Yup.string().email().required(),
+      password: Yup.string().required().min(6),
+    });
+
+    const data: SignInFormData = {
+      email: textLogin,
+      password: textPassword
     }
+    try {
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
+
+    } catch (error) {
+      setShowToast({ showToast: true, message: error.message, color: 'red' });
+      //if (error.message.includes())
+      console.log(error.message);
+    }
+
+    window.setTimeout(function () {
+      setShowToast({ showToast: false, message: '', color: '' });
+    }, 3000);
   }, [textLogin, textPassword]);
+
 
   const history = useHistory();
   return (
@@ -100,3 +111,33 @@ const SignIn: React.FC<SignInProps> = () => {
 
 
 export default SignIn;
+
+/*
+
+  const handleClickButtonSave = useCallback(() => {
+    try {
+      schema.isValid({
+        email: textLogin,
+        password: textPassword,
+      }).then(async function (valid) {
+        if (!valid) {
+          setShowToast({ showToast: true, message: 'Email ou Senha incorreto com formato incorreto!', color: 'red' });
+        } else {
+          await api.post('/sessions', {
+            email: textLogin,
+            password: textPassword
+          }).then(response => {
+            const { currentToken, user } = response.data;
+            console.log(currentToken, user);
+          })
+        }
+      });
+      window.setTimeout(function () {
+        setShowToast({ showToast: false, message: '', color: '' });
+      }, 3000);
+    } catch (error) {
+      if(error.message.includes())
+      console.log(error.message);
+    }
+  }, [textLogin, textPassword]);
+  */

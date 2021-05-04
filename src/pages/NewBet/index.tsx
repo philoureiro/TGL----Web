@@ -20,7 +20,7 @@ import {
   Img,
   PriceTotalOfGames
 } from './styles';
-import { getDataOfJson } from '../../services/api';
+import { getDataOfJson } from '../../services/apiii';
 import CopyrightBar from '../../components/CopyrightBar';
 import Header from '../../components/Header';
 import TypeOfGameButton from '../../components/TypeOfGameButton';

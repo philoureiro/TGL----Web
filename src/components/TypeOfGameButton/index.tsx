@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { Container, ButtonText } from './styles';
-import { getDataOfJson } from '../../services/api'
+import { getDataOfJson } from '../../services/apiii'
 import { useDispatch, useSelector } from 'react-redux';
 //import { RootState } from '../../store/store'
 

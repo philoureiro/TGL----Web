@@ -1,5 +1,5 @@
 const data = require('./games.json');
 
-export function getDataOfJson(){
+export function getDataOfJson() {
   return data.types;
 }

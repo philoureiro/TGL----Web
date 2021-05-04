@@ -17,7 +17,7 @@ import * as Icon from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IMainReducer } from '../../store/reducers';
-import { getDataOfJson } from '../../services/api'
+import { getDataOfJson } from '../../services/apiii'
 
 interface MyBetsProps { }
 
