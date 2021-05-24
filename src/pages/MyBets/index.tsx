@@ -18,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IMainReducer } from '../../store/reducers';
 import { getDataOfJson } from '../../services/apiii'
+import api from '../../services/api';
 
 interface MyBetsProps { }
 
@@ -28,50 +29,93 @@ interface RecentGamesProps {
   date: string;
   numbersSelecteds: [];
 }
-
-interface currentGameProps {
-  type: string;
-  description: string;
-  range: number;
-  price: number;
-  'max-number': number;
-  color: string;
-  'min-cart-value': number
+interface IGameProps {
+  id: number,
+  type: string,
+  description: string,
+  price: number,
+  color: string,
+  range: number,
+  max_number: number,
+  min_cart_value: number,
 }
 
 const MyBets: React.FC<MyBetsProps> = ({ }) => {
-  // const dataRedux = useSelector(
-  //   (state: IMainReducer) => state.cartReducer.gamesSelecteds,
-  // );
 
-  const [recentGames, setRecentGames] = useState([]);
+  const userRedux = useSelector((state: IMainReducer) => state.userReducer.user);
+  const gamesRedux = useSelector((state: IMainReducer) => state.gameReducer.games);
+  const [gamesSelecteds, setGamesSelecteds] = useState<IGameProps[]>([]);
+  const [betsOfUserOnTheApi, SetBetsOfUserOnTheApi] = useState([]);
 
-  const [currentGame, setCurrentGame] = useState<currentGameProps[]>([]);
+  async function loadingDataOnTheAPI(config: {}) {
+    let filter = [];
+    filter = gamesSelecteds.map((game) => {
+      return (game.id);
+    })
+    await api.post('/bets/filter', { filter: filter }, config).then(response => {
+      console.log('API =>', response.data)
+      SetBetsOfUserOnTheApi(response.data)
 
+      // });
+    })
+  }
 
   useEffect(() => {
-    let array;
-    if (currentGame[0]) {
-      //array = dataRedux.filter((element: RecentGamesProps) => element.type === currentGame[0].type)
-      //setRecentGames(array);
-    } else {
-      //  array = dataRedux;
-      //setRecentGames(array);
+    console.log('game redux', gamesRedux);
+    console.log('game select', gamesSelecteds);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userRedux.token.token}`
+      }
     }
 
+    try {
+      loadingDataOnTheAPI(config);
 
-  }, [currentGame]);
+    } catch (error) {
+      console.log('=>error', error)
+    }
+  }, [gamesSelecteds, gamesRedux])
 
-
+  //console.log(betsOfUserOnTheApi);
   const data = getDataOfJson();
 
-  const handleClickButtonTypeGame = useCallback(
-    nameButton => {
-      const dataCurrent = data.filter(e => e.type === nameButton);
-      setCurrentGame(dataCurrent);
-    },
-    [currentGame],
-  );
+
+  const handleClickTypeGame = useCallback((game) => {
+    if (gamesSelecteds.length > 0) {
+
+      gamesSelecteds.includes(game)
+        ? setGamesSelecteds(gamesSelecteds.filter(element => game !== element))
+        :
+        setGamesSelecteds([...gamesSelecteds, game])
+    } else {
+      setGamesSelecteds([game])
+    }
+
+  }, [gamesSelecteds])
+
+
+  const returnFilteredsBets = useCallback(() => {
+    return betsOfUserOnTheApi.map((bet: any, index: number) => {
+
+      const date = bet.date.replaceAll('-', '/');
+      const price = `(R$ ${bet.price.toFixed(2).replace('.', ',')})`
+      let game: any;
+
+      if (gamesRedux !== undefined) {
+        game = gamesRedux.filter((game) => game.id === bet.game_id)[0]
+      }
+
+      return (
+        <BoxNumbersAndTypeOfGameSelecteds onClick={() => { }} color={game !== undefined ? game.color : '#fff'} key={index + 1}
+          hasIconTrash={false} numbersSelecteds={bet.numbers_selecteds}
+          price={price} date={date} type={bet.game_type}
+        ></BoxNumbersAndTypeOfGameSelecteds>
+      )
+    })
+  }, [betsOfUserOnTheApi]);
+
   const history = useHistory();
   return (
     <>
@@ -82,16 +126,16 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
           <TextDataAndPrice>Filters</TextDataAndPrice>
           <BoxButtonsTypeOfGame>
             {
-              data.map((e: { type: string; color: string }, i: number) => {
+              gamesRedux.map((item: any, i: number) => {
                 return (
                   <TypeOfGameButton
-                    currentGame={currentGame}
-                    onClick={() => handleClickButtonTypeGame(e.type)}
+
+                    onClick={() => handleClickTypeGame(item)}
                     key={i + 1}
-                    backgroundColor={'#fff'}
-                    borderColor={e.color}
-                    color={e.color}
-                    nameButton={e.type}
+                    isSelected={gamesSelecteds.includes(item)}
+                    colorText={item.color}
+                    colorButton={item.color}
+                    nameButton={item.type}
                   ></TypeOfGameButton>
                 );
               })}
@@ -105,18 +149,9 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
           </ButtonNewBet>
         </BoxRecentGames>
         <DivAllGamesRecents>{
-          recentGames.length !== 0 ?
-            recentGames.map((element: RecentGamesProps, index) => {
-              return (
-                <BoxNumbersAndTypeOfGameSelecteds
-                  key={index + 1}
-                  numberSelecteds={element.numbersSelecteds}
-                  nameOfGame={element.type}
-                  markupColor={element.color}
-                  dataAndPrice={`${element.date} - R$ (${element.price.toFixed(2).replace('.', ',')})`}
-                />
-              );
-            })
+
+          betsOfUserOnTheApi.length > 0 ?
+            returnFilteredsBets()
 
             :
             <TextRecentGames style={{ marginTop: '150px', fontWeight: 'normal' }}>{`Não existe nenhum jogo salvo!`}</TextRecentGames>

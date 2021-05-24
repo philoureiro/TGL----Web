@@ -201,7 +201,7 @@ const NewBet: React.FC<NewBetProps> = () => {
             <TextChooseAGame>Choose a game</TextChooseAGame>
           </BoxTitle>
 
-          <BoxButtonsTypeOfGame>
+          {/* <BoxButtonsTypeOfGame>
             {data.map((e: { type: string; color: string }, i: number) => {
               return (
                 <TypeOfGameButton
@@ -215,7 +215,7 @@ const NewBet: React.FC<NewBetProps> = () => {
                 ></TypeOfGameButton>
               );
             })}
-          </BoxButtonsTypeOfGame>
+          </BoxButtonsTypeOfGame> */}
 
           <BoxDescription>
             <TextChooseAGame>Fill your bet</TextChooseAGame>
@@ -301,12 +301,12 @@ const NewBet: React.FC<NewBetProps> = () => {
                     >
                       <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
                     </BoxIcon>
-                    <BoxNumbersAndTypeOfGameSelecteds
+                    {/* <BoxNumbersAndTypeOfGameSelecteds
                       numberSelecteds={element.numbersSelecteds}
                       nameOfGame={element.type}
                       markupColor={element.color}
                       dataAndPrice={`${element.date} - R$ (${element.price.toFixed(2).replace('.', ',')})`}
-                    />
+                    /> */}
                   </BoxInternalCart>
                 );
               })
