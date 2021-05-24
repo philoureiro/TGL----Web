@@ -32,7 +32,7 @@ import * as Icon from 'react-icons/fa';
 import EmptyCart from '../../assets/emptyCar.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
-import { saveItensOfCart } from '../../store/actions';
+import { } from '../../store/actions';
 import { useHistory } from 'react-router-dom';
 import Toast from '../../components/Toast';
 
@@ -176,7 +176,7 @@ const NewBet: React.FC<NewBetProps> = () => {
 
   const handleClickButtonSave = useCallback(() => {
     if (parseFloat(returnPriceTotal()) >= 30) {
-      dispatch(saveItensOfCart(numbersSelectedsInCart));
+      // dispatch(saveItensOfCart(numbersSelectedsInCart));
       setnumbersSelectedsInCart([]);
       history.push('/mybets');
     } else {

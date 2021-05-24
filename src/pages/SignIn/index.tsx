@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   Container, BoxTypeOfCard, TextTypeOfCard, TextInput,
   ButtonRecoveryPassword, ButtonLogin, BoxIcon
@@ -11,8 +11,8 @@ import Toast from '../../components/Toast';
 import * as Icon from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveDataOfUser } from '../../store/actions';
-import { RootState } from '../../store';
+import { saveDataOfUser, saveGames } from '../../store/actions';
+import { gameReducer, IMainReducer, IUserState } from '../../store/reducers'
 import * as Yup from 'yup';
 import api from '../../services/api'
 
@@ -35,11 +35,15 @@ const SignIn: React.FC<SignInProps> = () => {
   const [textLogin, setTextLogin] = useState('');
   const [textPassword, setTextPassword] = useState('');
   const dispatch = useDispatch();
-  const dataRedux = useSelector((state: RootState) => state.userReducer);
+  const userRedux = useSelector((state: IMainReducer) => state.userReducer.user);
+  const gameRedux = useSelector((state: IMainReducer) => state.gameReducer.games);
+  const betRedux = useSelector((state: IMainReducer) => state.betReducer.myBets);
   const [showToast, setShowToast] = useState<ToastProps>();
+  const [loading, setLoading] = useState(false);
 
 
-  const handleClickButtonSave = useCallback(async () => {
+
+  const handleClickButtonLogin = useCallback(async () => {
     let schema = Yup.object().shape({
       email: Yup.string().email().required(),
       password: Yup.string().required().min(6),
@@ -54,11 +58,58 @@ const SignIn: React.FC<SignInProps> = () => {
         abortEarly: false,
       });
 
+      let currentToken: any, user;
 
+
+      await api.post('/sessions', {
+        "email": textLogin,
+        "password": textPassword
+
+      }).then(async response => {
+        currentToken = response.data.currentToken;
+        user = response.data.user;
+        //  console.log('=>response', response.data);
+        const userData: IUserState = {
+          user: {
+            refreshToken: currentToken.refreshToken,
+            token: {
+              token: currentToken.token,
+              type: currentToken.type,
+            },
+            email: user.email,
+            id: user.id,
+            username: user.username,
+          }
+        }
+
+        //console.log(userData)
+        await dispatch(saveDataOfUser(userData));
+        setLoading(false);
+      })
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userRedux.token.token}`
+        }
+      }
+
+      await api.get('/games', config).then(async response => {
+        console.log('=>', response.data)
+        await dispatch(saveGames(response.data));
+        setLoading(false);
+      })
+
+      history.push('/mybets')
     } catch (error) {
-      setShowToast({ showToast: true, message: error.message, color: 'red' });
-      //if (error.message.includes())
-      console.log(error.message);
+      if (error.message.includes('password must be at least 6 characters')) {
+        setShowToast({ showToast: true, message: 'A senha deve ter no mínimo 06 letras.', color: 'red' });
+      }
+
+      if (error.message.includes('Request failed with status code 401')) {
+        setShowToast({ showToast: true, message: 'Email ou Senha incorretos.', color: 'red' });
+      }
+      console.log(error);
     }
 
     window.setTimeout(function () {
@@ -68,6 +119,13 @@ const SignIn: React.FC<SignInProps> = () => {
 
 
   const history = useHistory();
+
+
+  useEffect(() => {
+    // console.log('=> USER', userRedux);
+    // console.log('=> GAME', gameRedux);
+    // console.log('=> BET', betRedux);
+  }, [gameRedux, betRedux, userRedux])
   return (
     <>
       <Container>
@@ -83,7 +141,7 @@ const SignIn: React.FC<SignInProps> = () => {
               <TextInput onChange={text => setTextPassword(text.target.value)} type={'password'}></TextInput>
             </BoxInput>
             <ButtonRecoveryPassword onClick={() => history.push('/recovery')}>I forget my password</ButtonRecoveryPassword>
-            <ButtonLogin onClick={() => handleClickButtonSave()}>
+            <ButtonLogin onClick={() => handleClickButtonLogin()}>
               Log In
               <BoxIcon>
                 <Icon.FaArrowRight size={30}></Icon.FaArrowRight>
@@ -111,33 +169,3 @@ const SignIn: React.FC<SignInProps> = () => {
 
 
 export default SignIn;
-
-/*
-
-  const handleClickButtonSave = useCallback(() => {
-    try {
-      schema.isValid({
-        email: textLogin,
-        password: textPassword,
-      }).then(async function (valid) {
-        if (!valid) {
-          setShowToast({ showToast: true, message: 'Email ou Senha incorreto com formato incorreto!', color: 'red' });
-        } else {
-          await api.post('/sessions', {
-            email: textLogin,
-            password: textPassword
-          }).then(response => {
-            const { currentToken, user } = response.data;
-            console.log(currentToken, user);
-          })
-        }
-      });
-      window.setTimeout(function () {
-        setShowToast({ showToast: false, message: '', color: '' });
-      }, 3000);
-    } catch (error) {
-      if(error.message.includes())
-      console.log(error.message);
-    }
-  }, [textLogin, textPassword]);
-  */

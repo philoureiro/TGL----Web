@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { saveDataOfUser } from '../../store/actions'
 import * as Yup from 'yup';
 import Toast from '../../components/Toast';
+import api from '../../services/api';
 
 interface SignUpProps {
 
@@ -44,15 +45,26 @@ const SignUp: React.FC<SignUpProps> = () => {
         name: textName,
         email: textLogin,
         password: textPassword,
-      }).then(function (valid) {
+      }).then(async function (valid) {
         if (!valid) {
           setShowToast({ showToast: true, message: 'Dados digitados em formato incorreto!', color: 'red' });
         } else {
-          dispatch(saveDataOfUser(textName, textLogin, textPassword))
-          setShowToast({ showToast: true, message: 'Usuário cadastrado com sucesso!', color: 'green' })
-          window.setTimeout(function () {
-            history.push('/');
-          }, 1000);
+
+          await api.post('/users', {
+            "username": textName,
+            "email": textLogin,
+            "password": textPassword,
+            "password_confirmation": textPassword
+          }).then(response => {
+
+            console.log(response.data)
+            //   dispatch(saveDataOfUser(textName, textLogin, textPassword))
+            setShowToast({ showToast: true, message: 'Usuário cadastrado com sucesso!', color: 'green' })
+            window.setTimeout(function () {
+              history.push('/');
+            }, 1000);
+          })
+
         }
       });
       window.setTimeout(function () {
@@ -109,3 +121,5 @@ const SignUp: React.FC<SignUpProps> = () => {
 
 
 export default SignUp;
+
+

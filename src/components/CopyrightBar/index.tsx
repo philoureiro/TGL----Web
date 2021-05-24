@@ -5,7 +5,7 @@ const Card: React.FC = () => {
 
   return (
     <Container>
-      <Text> Copyright - Luby Software 2021</Text>
+      <Text> Copyright - Philipe Loureiro 2021</Text>
     </Container>
   );
 }

@@ -40,9 +40,9 @@ interface currentGameProps {
 }
 
 const MyBets: React.FC<MyBetsProps> = ({ }) => {
-  const dataRedux = useSelector(
-    (state: IMainReducer) => state.cartReducer.gamesSelecteds,
-  );
+  // const dataRedux = useSelector(
+  //   (state: IMainReducer) => state.cartReducer.gamesSelecteds,
+  // );
 
   const [recentGames, setRecentGames] = useState([]);
 
@@ -52,11 +52,11 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
   useEffect(() => {
     let array;
     if (currentGame[0]) {
-      array = dataRedux.filter((element: RecentGamesProps) => element.type === currentGame[0].type)
-      setRecentGames(array);
+      //array = dataRedux.filter((element: RecentGamesProps) => element.type === currentGame[0].type)
+      //setRecentGames(array);
     } else {
-      array = dataRedux;
-      setRecentGames(array);
+      //  array = dataRedux;
+      //setRecentGames(array);
     }
 
 

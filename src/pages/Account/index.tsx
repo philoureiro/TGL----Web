@@ -12,9 +12,10 @@ import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import Header from '../../components/Header';
 import { useSelector, useDispatch } from 'react-redux';
-import { IMainReducer } from '../../store/reducers';
+import { IMainReducer, IUserState } from '../../store/reducers';
 import { saveDataOfUser } from '../../store/actions';
 import Toast from '../../components/Toast';
+import api from '../../services/api';
 
 
 
@@ -31,8 +32,8 @@ interface ToastProps {
 const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
 
   const dispatch = useDispatch();
-  const dataRedux = useSelector(
-    (state: IMainReducer) => state.userReducer,
+  const userRedux = useSelector(
+    (state: IMainReducer) => state.userReducer.user,
   );
 
   const [textEmail, setTextEmail] = useState('');
@@ -41,10 +42,10 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
   const [showToast, setShowToast] = useState<ToastProps>();
 
   useEffect(() => {
-    setTextName(dataRedux.name);
-    setTextEmail(dataRedux.email);
-    setTextPassword(dataRedux.password);
-  }, [dataRedux]);
+    // setTextName(dataRedux.name);
+    // setTextEmail(dataRedux.email);
+    // setTextPassword(dataRedux.password);
+  }, [userRedux]);
 
   let schema = Yup.object().shape({
     name: Yup.string().required().min(6),
@@ -58,17 +59,49 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
         email: textEmail,
         name: textName,
         password: textPassword,
-      }).then(function (valid) {
+      }).then(async function (valid) {
         if (!valid) {
           setShowToast({ showToast: true, message: 'Dados digitados em formato incorreto!', color: 'red' });
         } else {
-          dispatch(saveDataOfUser(textName, textEmail, textPassword));
-          setShowToast({ showToast: true, message: 'Dados alterados com sucesso!', color: 'green' });
+
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${userRedux.token.token}`
+            }
+          };
+          const data = {
+            "username": textName,
+            "email": textEmail,
+            "password": textPassword,
+            "password_confirmation": textPassword
+          }
+          await api.put(`/users/${userRedux.id}`, data, config).then(async response => {
+            const { id, username, email } = response.data;
+            //  console.log('=>response', response.data);
+            const userData: IUserState = {
+              user: {
+                refreshToken: userRedux.refreshToken,
+                token: {
+                  token: userRedux.token.token,
+                  type: userRedux.token.type,
+                },
+                email: email,
+                id: id,
+                username: username,
+              }
+            }
+
+            await dispatch(saveDataOfUser(userData));
+
+            //  dispatch(saveDataOfUser(textName, textEmail, textPassword));
+            setShowToast({ showToast: true, message: 'Dados alterados com sucesso!', color: 'green' });
+            history.goBack()
+          })
         }
         window.setTimeout(function () {
           setShowToast({ showToast: false, message: '', color: '' });
         }, 3000);
-
       });
     } catch (error) {
       console.log(error);
@@ -86,10 +119,10 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
           <TextTypeOfCard>Change your data</TextTypeOfCard>
           <CardInput>
             <BoxInput label={'Name:'}>
-              <TextInput placeholder={dataRedux.name} onChange={text => setTextName(text.target.value)} type={'text'}></TextInput>
+              <TextInput placeholder={userRedux.username} onChange={text => setTextName(text.target.value)} type={'text'}></TextInput>
             </BoxInput>
             <BoxInput label={'Email:'}>
-              <TextInput placeholder={dataRedux.email} onChange={text => setTextEmail(text.target.value)} type={'text'}></TextInput>
+              <TextInput placeholder={userRedux.email} onChange={text => setTextEmail(text.target.value)} type={'text'}></TextInput>
             </BoxInput>
             <BoxInput label={'Password:'}>
               <TextInput type={'password'} onChange={text => setTextPassword(text.target.value)} ></TextInput>
@@ -122,3 +155,42 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
 
 
 export default RecoveryPassword;
+
+
+/**
+ *
+ *
+ *    const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userRedux.token.token}`
+        }
+      };
+      const data = {
+        "username": name,
+        "email": email,
+        "password": password,
+        "password_confirmation": password
+      }
+      await api.put(`/users/${userRedux.id}`, data, config).then(async response => {
+        const { id, username, email } = response.data;
+        //  console.log('=>response', response.data);
+        const userData: IUserState = {
+          user: {
+            refreshToken: userRedux.refreshToken,
+            token: {
+              token: userRedux.token.token,
+              type: userRedux.token.type,
+            },
+            email: email,
+            id: id,
+            username: username,
+          }
+        }
+
+        await dispatch(saveDataOfUser(userData));
+        setLoading(false);
+        Alert.alert('Dados alterados com sucesso!');
+      })
+
+ */
