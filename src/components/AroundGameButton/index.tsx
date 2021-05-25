@@ -2,16 +2,19 @@ import React from 'react';
 import { Container, Text } from './styles';
 
 interface AroundGameButtonProps {
-  numberButton: string;
-  backgroundColor: string;
+  numberButton: number;
   isSelected: boolean;
-  currentGame: any;
+  color: string;
   onClick: () => void;
 }
 
-const AroundGameButton: React.FC<AroundGameButtonProps> = ({ isSelected, onClick, currentGame, numberButton, backgroundColor }) => (
+const AroundGameButton: React.FC<AroundGameButtonProps> = ({
+  numberButton,
+  color,
+  isSelected,
+  onClick }) => (
 
-  <Container onClick={onClick} style={{ backgroundColor: isSelected ? currentGame[0].color : backgroundColor }}>
+  <Container onClick={onClick} style={{ backgroundColor: isSelected ? color : '#C1C1C1' }}>
     <Text >{numberButton}</Text>
   </Container>
 

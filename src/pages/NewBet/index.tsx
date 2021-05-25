@@ -35,6 +35,8 @@ import { RootState } from '../../store';
 import { } from '../../store/actions';
 import { useHistory } from 'react-router-dom';
 import Toast from '../../components/Toast';
+import { IMainReducer } from '../../store/reducers';
+import api from '../../services/api';
 
 interface NewBetProps { }
 interface DataProps {
@@ -47,12 +49,29 @@ interface DataProps {
   'min-cart-value': number;
 }
 
+interface IBet {
+  id: number;
+  price: number;
+  numbersSelecteds: string;
+}
 interface IGame {
-  numbersSelecteds: number[];
+  id: number,
+  numbersSelecteds: string;
   color: string;
   price: number;
   date: string;
   type: string;
+}
+
+interface IGameProps {
+  id: number,
+  type: string,
+  description: string,
+  price: number,
+  color: string,
+  range: number,
+  max_number: number,
+  min_cart_value: number,
 }
 
 interface ToastProps {
@@ -63,84 +82,75 @@ interface ToastProps {
 
 
 const NewBet: React.FC<NewBetProps> = () => {
-  const data = getDataOfJson();
+  const gamesRedux = useSelector((state: IMainReducer) => state.gameReducer.games);
+  const userRedux = useSelector((state: IMainReducer) => state.userReducer.user);
   const [numbers, setNumbers] = useState([]);
   const [numbersSelecteds, setnumbersSelecteds] = useState<number[]>([]);
   const [numbersSelectedsInCart, setnumbersSelectedsInCart] = useState<IGame[]>(
     [],
   );
-  const [currentGame, setCurrentGame] = useState<DataProps[]>(data);
+  const [gameSelected, setGameSelected] = useState<IGameProps>(gamesRedux[0]);
   const [showToast, setShowToast] = useState<ToastProps>();
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     let arrayOfButtons: any = [];
 
-    for (let index = 0; index < currentGame[0].range; index++) {
+    for (let index = 0; index < gameSelected.range; index++) {
       arrayOfButtons.push(index + 1);
     }
 
     setNumbers(arrayOfButtons);
     setnumbersSelecteds([]);
 
-  }, [currentGame]);
+  }, [gameSelected]);
 
-  const HandleSelected = useCallback(
-    (number: number) => {
-      if (
-        !numbersSelecteds.includes(number) &&
-        numbersSelecteds.length < currentGame[0]['max-number']
-      ) {
-        setnumbersSelecteds(
-          [...numbersSelecteds, number].sort((a, b) => a - b),
-        );
-      } else {
-        setnumbersSelecteds(numbersSelecteds.filter(n => n !== number));
-      }
-    },
-    [numbersSelecteds],
-  );
 
-  const functionReturnNumber = useCallback(() => {
-    return numbers.map((number: any, index) => (
-      <AroundGameButton
-        key={index + 1}
-        onClick={() => HandleSelected(number)}
-        isSelected={numbersSelecteds.includes(number)}
-        currentGame={currentGame}
-        backgroundColor={'#ADC0C4'}
-        numberButton={number}
-      ></AroundGameButton>
-    ));
+  const handleClickAroundButtons = useCallback((number) => {
+
+    if (!numbersSelecteds.includes(number) && numbersSelecteds.length < gameSelected.max_number) {
+      setnumbersSelecteds([...numbersSelecteds, number].sort((a, b) => a - b))
+    } else {
+      setnumbersSelecteds(numbersSelecteds.filter(element => element !== number))
+    }
+
   }, [numbersSelecteds]);
 
-  const handleClickButtonTypeGame = useCallback(
-    nameButton => {
-      const dataCurrent = data.filter(e => e.type === nameButton);
-      setCurrentGame(dataCurrent);
-    },
-    [currentGame],
-  );
+  const returnAroundButtons = useCallback(() => {
+    let aroundButtons = [];
+    for (let index = 0; index < gameSelected.range; index++) {
 
-  const handleAddToCart = useCallback(
-    typeOfGameSelected => {
-      const dataAtual = new Date();
-      const dataFormat = ((dataAtual.getDate())) + "/" + ((dataAtual.getMonth() + 1)) + "/" + dataAtual.getFullYear();
+      aroundButtons.push(<AroundGameButton key={index + 1} onClick={() => handleClickAroundButtons(index + 1)} numberButton={index + 1}
+        color={gameSelected.color} isSelected={numbersSelecteds.includes(index + 1)} />)
+    }
+    return aroundButtons;
+  }, [gameSelected, numbersSelecteds]);
 
-      let gameSelected: IGame = {
-        type: typeOfGameSelected.type,
-        price: typeOfGameSelected.price,
-        date: dataFormat,
-        color: typeOfGameSelected.color,
-        numbersSelecteds: numbersSelecteds,
-      };
-      const array = [...numbersSelectedsInCart];
-      array.push(gameSelected);
-      setnumbersSelectedsInCart(array);
-      setnumbersSelecteds([]);
-    },
+  const handleClickTypeGame = useCallback((game) => {
+    setGameSelected(game)
+    setnumbersSelecteds([]);
+
+  }, [gameSelected])
+
+  const handleAddToCart = useCallback(() => {
+    const dataAtual = new Date();
+    const dataFormat = ((dataAtual.getDate())) + "/" + ((dataAtual.getMonth() + 1)) + "/" + dataAtual.getFullYear();
+    let gameSelectedCurrent: IGame = {
+      type: gameSelected.type,
+      id: gameSelected.id,
+      price: gameSelected.price,
+      date: dataFormat,
+      color: gameSelected.color,
+      numbersSelecteds: JSON.stringify(numbersSelecteds).replace("[", '').replace("]", '')
+    };
+    const array = [...numbersSelectedsInCart];
+    array.push(gameSelectedCurrent);
+    setnumbersSelectedsInCart(array);
+    setnumbersSelecteds([]);
+  },
     [numbersSelecteds],
   );
 
@@ -150,11 +160,11 @@ const NewBet: React.FC<NewBetProps> = () => {
 
   const handleCompleteGame = useCallback(() => {
     let currentArray = numbersSelecteds;
-    while (currentArray.length < currentGame[0]['max-number']) {
-      const buttonRandom = getRandom(1, currentGame[0].range);
+    while (currentArray.length < gameSelected['max_number']) {
+      const buttonRandom = getRandom(1, gameSelected.range);
       if (
         !numbersSelecteds.includes(buttonRandom) &&
-        numbersSelecteds.length < currentGame[0]['max-number']
+        numbersSelecteds.length < gameSelected['max_number']
       ) {
         currentArray.push(buttonRandom);
       }
@@ -174,13 +184,44 @@ const NewBet: React.FC<NewBetProps> = () => {
     return price.toFixed(2).replace('.', ',');
   }, [numbersSelectedsInCart]);
 
-  const handleClickButtonSave = useCallback(() => {
-    if (parseFloat(returnPriceTotal()) >= 30) {
-      // dispatch(saveItensOfCart(numbersSelectedsInCart));
-      setnumbersSelectedsInCart([]);
-      history.push('/mybets');
-    } else {
-      setShowToast({ showToast: true, message: 'Precisamos de ao menos 30 reais em compras para salvarmos...', color: 'red' });
+  const handleClickButtonSave = useCallback(async () => {
+
+    try {
+      if (parseFloat(returnPriceTotal()) >= 30) {
+
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userRedux.token.token}`
+          }
+        }
+
+        let cart: IBet[] = [];
+
+        numbersSelectedsInCart.forEach((bet: any) => {
+          const currentBet = {
+            id: bet.id,
+            price: bet.price,
+            numbersSelecteds: bet.numbersSelecteds,
+          }
+          cart.push(currentBet)
+        })
+
+        await api.post('/bets', { cart: cart, totalPrice: 50 }, config).then(async response => {
+          setShowToast({ showToast: true, message: 'Apostas salva com sucesso!', color: 'green' });
+          setnumbersSelectedsInCart([]);
+          history.push('/mybets');
+        });
+
+      } else {
+        setShowToast({ showToast: true, message: 'Precisamos de ao menos 30 reais em compras para salvarmos...', color: 'red' });
+        window.setTimeout(function () {
+          setShowToast({ showToast: false, message: '', color: '' });
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error)
+      setShowToast({ showToast: true, message: 'Erro ao salvar apostas.', color: 'red' });
       window.setTimeout(function () {
         setShowToast({ showToast: false, message: '', color: '' });
       }, 3000);
@@ -201,31 +242,32 @@ const NewBet: React.FC<NewBetProps> = () => {
             <TextChooseAGame>Choose a game</TextChooseAGame>
           </BoxTitle>
 
-          {/* <BoxButtonsTypeOfGame>
-            {data.map((e: { type: string; color: string }, i: number) => {
-              return (
-                <TypeOfGameButton
-                  currentGame={currentGame}
-                  onClick={() => handleClickButtonTypeGame(e.type)}
-                  key={i + 1}
-                  backgroundColor={'#fff'}
-                  borderColor={e.color}
-                  color={e.color}
-                  nameButton={e.type}
-                ></TypeOfGameButton>
-              );
-            })}
-          </BoxButtonsTypeOfGame> */}
+          <BoxButtonsTypeOfGame>
+            {
+              gamesRedux.map((item: any, i: number) => {
+                return (
+                  <TypeOfGameButton
+
+                    onClick={() => handleClickTypeGame(item)}
+                    key={i + 1}
+                    isSelected={gameSelected === item}
+                    colorText={item.color}
+                    colorButton={item.color}
+                    nameButton={item.type}
+                  ></TypeOfGameButton>
+                );
+              })}
+          </BoxButtonsTypeOfGame>
 
           <BoxDescription>
             <TextChooseAGame>Fill your bet</TextChooseAGame>
             <TextDescriptionOfBet>
-              {currentGame[0].description}
+              {gameSelected.description}
             </TextDescriptionOfBet>
           </BoxDescription>
 
           <BoxNumberAllButtonsArounds>
-            {functionReturnNumber()}
+            {returnAroundButtons()}
           </BoxNumberAllButtonsArounds>
 
           <BoxActionsButtons>
@@ -249,14 +291,14 @@ const NewBet: React.FC<NewBetProps> = () => {
             <GameActionButton
               nameButton={'Add to cart'}
               onClick={() => {
-                if (numbersSelecteds.length < currentGame[0]['max-number']) {
-                  setShowToast({ showToast: true, message: `São necessários ao menos ${currentGame[0]['max-number']} números selecionados para adicionar ao carrinho!`, color: 'red' });
+                if (numbersSelecteds.length < gameSelected['max_number']) {
+                  setShowToast({ showToast: true, message: `São necessários ao menos ${gameSelected['max_number']} números selecionados para adicionar ao carrinho!`, color: 'red' });
                   window.setTimeout(function () {
                     // setShowToast({ showToast: false, message: '', color: '' });
                   }, 3000);
 
                 } else {
-                  handleAddToCart(currentGame[0]);
+                  handleAddToCart();
                 }
               }}
               backgroundColor={'#01AC66'}
@@ -301,12 +343,14 @@ const NewBet: React.FC<NewBetProps> = () => {
                     >
                       <Icon.FaTrash size={30} color={'#888888'}></Icon.FaTrash>
                     </BoxIcon>
-                    {/* <BoxNumbersAndTypeOfGameSelecteds
-                      numberSelecteds={element.numbersSelecteds}
-                      nameOfGame={element.type}
-                      markupColor={element.color}
-                      dataAndPrice={`${element.date} - R$ (${element.price.toFixed(2).replace('.', ',')})`}
-                    /> */}
+                    {
+
+
+                      <BoxNumbersAndTypeOfGameSelecteds onClick={() => { }} color={element.color} key={indice + 1}
+                        hasIconTrash={false} numbersSelecteds={element.numbersSelecteds}
+                        price={`R$ ${element.price.toFixed(2).replace('.', ',')}`} date={element.date} type={element.type}
+                      ></BoxNumbersAndTypeOfGameSelecteds>
+                    }
                   </BoxInternalCart>
                 );
               })
