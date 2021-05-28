@@ -53,7 +53,7 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
       return (game.id);
     })
     await api.post('/bets/filter', { filter: filter }, config).then(response => {
-      console.log('API =>', response.data)
+
       SetBetsOfUserOnTheApi(response.data)
 
       // });
@@ -61,8 +61,7 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
   }
 
   useEffect(() => {
-    console.log('game redux', gamesRedux);
-    console.log('game select', gamesSelecteds);
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +77,6 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
     }
   }, [gamesSelecteds, gamesRedux])
 
-  //console.log(betsOfUserOnTheApi);
   const data = getDataOfJson();
 
 
@@ -99,7 +97,8 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
   const returnFilteredsBets = useCallback(() => {
     return betsOfUserOnTheApi.map((bet: any, index: number) => {
 
-      const date = bet.date.replaceAll('-', '/');
+      const date = bet.updated_at.split('T')[0].replaceAll('-', '/')
+
       const price = `(R$ ${bet.price.toFixed(2).replace('.', ',')})`
       let game: any;
 
@@ -110,7 +109,7 @@ const MyBets: React.FC<MyBetsProps> = ({ }) => {
       return (
         <BoxNumbersAndTypeOfGameSelecteds onClick={() => { }} color={game !== undefined ? game.color : '#fff'} key={index + 1}
           hasIconTrash={false} numbersSelecteds={bet.numbers_selecteds}
-          price={price} date={date} type={bet.game_type}
+          price={price} date={date} type={game.type}
         ></BoxNumbersAndTypeOfGameSelecteds>
       )
     })

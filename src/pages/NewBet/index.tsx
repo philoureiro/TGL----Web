@@ -52,7 +52,7 @@ interface DataProps {
 interface IBet {
   id: number;
   price: number;
-  numbersSelecteds: string;
+  numbers_selecteds: string;
 }
 interface IGame {
   id: number,
@@ -199,10 +199,11 @@ const NewBet: React.FC<NewBetProps> = () => {
         let cart: IBet[] = [];
 
         numbersSelectedsInCart.forEach((bet: any) => {
+
           const currentBet = {
             id: bet.id,
             price: bet.price,
-            numbersSelecteds: bet.numbersSelecteds,
+            numbers_selecteds: bet.numbersSelecteds,
           }
           cart.push(currentBet)
         })
