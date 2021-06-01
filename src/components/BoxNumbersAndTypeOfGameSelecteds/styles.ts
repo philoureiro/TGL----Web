@@ -16,6 +16,7 @@ export const BoxInternal = styled.div`
   justify-content: space-evenly;
   align-items: flex-start;
   flex-direction: column;
+
 `;
 
 export const MarkupBox = styled.div`

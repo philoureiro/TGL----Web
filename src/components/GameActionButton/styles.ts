@@ -11,9 +11,10 @@ export const Container = styled.button`
   border-width: 3px;
   border-style: solid;
   outline: none;
-  cursor: pointer;
-  &:hover{
-        background: ${shade(0.1, '#E2E2E2')};
+      @media(max-width: 550px){
+        background-color:red;
+        margin-left: 10px;
+        margin-right: 10px;
       }
 `;
 
@@ -22,4 +23,8 @@ export const TextButton = styled.h3`
   margin-right: 20px;
   font-size: 24px;
   color: #fff;
+
+  @media(max-width: 900px){
+    font-size: 16px ;
+  }
 `;

@@ -30,6 +30,12 @@ export const BoxRecentGames = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
+
+  @media(max-width: 900px){
+    flex-direction: column;
+    margin-bottom: 150px;
+    margin-top: 300px;
+  }
 `;
 
 export const TextRecentGames = styled.h3`
@@ -38,6 +44,7 @@ export const TextRecentGames = styled.h3`
   font-weight: bold;
   color: #707070;
   font-size: 38px;
+  margin-left: 10px;
 `;
 
 export const TextDataAndPrice = styled.h3`
@@ -47,11 +54,16 @@ export const TextDataAndPrice = styled.h3`
   font-style: italic;
   font-weight: normal;
   color: #868686;
-  font-size: 20px;
+  font-size: 23px;
+
+  @media(max-width: 900px){
+    font-size: 30px;
+  }
 `;
 
 export const ButtonNewBet = styled.button`
-  margin-left: 200px;
+  margin-left: 40px;
+  margin-right: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,6 +76,12 @@ export const ButtonNewBet = styled.button`
   outline: none;
   background-color: transparent;
   cursor: pointer;
+
+
+  @media (max-width: 900px){
+    font-size: 40px;
+    margin-bottom: 130px;
+  }
 `;
 
 
@@ -95,8 +113,19 @@ export const BoxInternalCart = styled.div`
 export const BoxButtonsTypeOfGame = styled.div`
   display: flex;
   height: 100px;
-  width: 970px;
+  width: auto;
   justify-content: flex-start;
   align-items:  center;
   overflow-x: auto;
+
+
+  @media (max-width: 900px){
+    height: 800px;
+    width: 550px;
+    overflow-x: visible;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
 `;

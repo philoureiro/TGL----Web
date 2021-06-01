@@ -19,6 +19,10 @@ export const Container = styled.button`
   &:hover{
         background: ${shade(0.1, '#E2E2E2')};
       }
+
+    @media (max-width: 900px){
+      margin-bottom: 10px;
+    }
 `;
 
 export const ButtonText = styled.h3`

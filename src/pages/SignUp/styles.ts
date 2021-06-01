@@ -12,6 +12,10 @@ export const Container = styled.div`
   border-width: 5px;
   border-color: #EBEBEB;
   border-style: solid;
+
+  @media(max-width: 900px){
+    flex-direction: column;
+  }
 `;
 
 export const BoxTypeOfCard = styled.div`
@@ -21,6 +25,11 @@ export const BoxTypeOfCard = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
+  @media(max-width: 900px){
+    margin-right: 100px;
+    margin-top: -100px;
+  }
 `;
 
 export const TextTypeOfCard = styled.h3`

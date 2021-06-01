@@ -21,6 +21,10 @@ export const ButtonAccount = styled.button`
   border: none;
   background-color: transparent;
   cursor: pointer;
+
+  @media (max-width:900px ){
+    margin-left: 24vw;
+  }
 `;
 
 export const BoxLogo = styled.div`
@@ -65,6 +69,7 @@ export const ButtonLogout = styled.button`
   outline: none;
   background-color: transparent;
   cursor: pointer;
+
 `;
 
 export const BoxIcon = styled.div`
@@ -73,4 +78,3 @@ export const BoxIcon = styled.div`
   align-items: center;
   justify-content: center;
 `;
-

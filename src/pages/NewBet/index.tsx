@@ -286,7 +286,6 @@ const NewBet: React.FC<NewBetProps> = () => {
               backgroundColor={'#fff'}
               color={'#01AC66'}
               borderColor={'#01AC66'}
-              marginLeft={'-250px'}
             ></GameActionButton>
 
             <GameActionButton

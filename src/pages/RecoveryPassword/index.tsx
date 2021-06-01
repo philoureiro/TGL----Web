@@ -102,26 +102,3 @@ const RecoveryPassword: React.FC<RecoveryPasswordProps> = () => {
 
 export default RecoveryPassword;
 
-
-/**
- *
- *
- *
- *
-  const handleClickButton = useCallback(async () => {
-    setLoading(true);
-    try {
-      await api.post('/forgotpassword', {
-        "email": email,
-        "redirect_url": "http://www.meusistema.com/recovery-password"
-      }).then(response => {
-        setLoading(false);
-        navigation.navigate('UpdatePassword')
-      })
-    } catch (error) {
-      console.log('=>', error)
-      setLoading(false);
-      Alert.alert('Erro ao recuperar senha!')
-    }
- *
- */

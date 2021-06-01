@@ -5,7 +5,8 @@ import { shade } from 'polished';
 export const Container = styled.div`
   min-height: 100vh;
   max-height: 100%;
-  width: 100vw;
+  min-width: 100vh;
+  max-width: 100%;
   justify-content: center;
   align-items:  center;
   flex-direction: row;
@@ -15,6 +16,14 @@ export const Container = styled.div`
   border-width: 5px;
   border-color: #EBEBEB;
   border-style: solid;
+  margin-right: -100px;
+
+  @media(max-width: 900px){
+    flex-direction: column;
+    justify-content: left;
+  align-items:  initial;
+  left: 10px;
+  }
 `;
 
 export const Text = styled.h3`
@@ -29,6 +38,12 @@ export const BoxNewBet = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   overflow-x: auto;
+
+  @media(max-width: 900px){
+    justify-content: left;
+    align-items:flex-start;
+    margin-left: 60px;
+  }
 `;
 
 export const BoxNewCart = styled.div`
@@ -44,6 +59,11 @@ margin-top: -140px;
   border-width: 5px;
   border-style: solid;
   border-radius: 15px;
+
+  @media(max-width: 900px){
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
 
 `;
 
@@ -76,6 +96,12 @@ export const BoxTitle = styled.div`
   align-items: flex-start;
   width: 420px;
   margin-top: -30px;
+
+  @media(max-width: 900px){
+    margin-top: 50px;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const BoxDescription = styled.div`
@@ -84,7 +110,13 @@ export const BoxDescription = styled.div`
   align-items: left;
   width: 970px;
   flex-direction: column;
-`;
+
+  @media(max-width: 900px){
+    width: 550px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  `;
 
 
 export const TextNewBet = styled.h3`
@@ -140,6 +172,17 @@ export const BoxButtonsTypeOfGame = styled.div`
   justify-content: flex-start;
   align-items:  center;
   overflow-x: auto;
+
+
+  @media (max-width: 900px){
+    height: 200px;
+    width: 550px;
+    overflow-x: visible;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
 `;
 
 
@@ -150,6 +193,11 @@ export const BoxNumberAllButtonsArounds = styled.div`
   max-width: 1000px;
   justify-items: center;
   overflow-x: auto;
+
+  @media(max-width: 900px){
+    width: 550px;
+    margin-left: 10px;
+  }
 `;
 
 export const BoxActionsButtons = styled.div`
@@ -159,6 +207,10 @@ export const BoxActionsButtons = styled.div`
   height: 70px;
   justify-content: space-between;
   align-items:  center;
+
+  @media(max-width: 900px){
+    width: 550px;
+  }
 `;
 
 export const BoxIcon = styled.div`

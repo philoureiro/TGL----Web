@@ -18,6 +18,10 @@ export const Text_For = styled.h3`
   font-size: 25px;
   color: '#707070';
 
+  @media(max-width: 900px){
+    font-size: 15px;
+  }
+
 `;
 
 export const Div = styled.div`
@@ -35,6 +39,9 @@ export const Text_TheGreatestApp = styled.h1`
   font-style: italic;
   font-weight: bold;
   font-family: Helvetica, sans-serif;
+  @media(max-width: 900px){
+    font-size: 55px;
+  }
 `;
 
 export const Box_Logo = styled.div`
@@ -53,6 +60,10 @@ export const Text_Lottery = styled.h3`
   font-style: italic;
   font-weight: bold;
   font-family: Helvetica, sans-serif;
+
+  @media(max-width: 900px){
+    font-size: 70px;
+  }
 
 `;
 
